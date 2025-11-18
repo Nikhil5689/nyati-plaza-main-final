@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visit - Nyati Plaza</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #002F67;
+            --accent: #E5B200;
+            --gradient: linear-gradient(135deg, #002F67 0%, #004a8f 50%, #0070b0 100%);
+            --text-dark: #0F1724;
+            --text-light: #ffffff;
+            --bg-light: #ffffff;
+            --bg-soft: #FAFBFD;
+            --shadow: 0 10px 30px rgba(0, 47, 103, 0.1);
+            --shadow-lg: 0 20px 40px rgba(0, 47, 103, 0.15);
+            --radius: 20px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            background: var(--bg-light);
+            color: var(--text-dark);
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        .glass-header {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 4px 20px rgba(0, 47, 103, 0.08);
+        }
+        
+        .sticky-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            /* Added padding for consistency */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        /* Added scrolled class for header shrink */
+        .sticky-header.scrolled {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+        
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after,
+        .nav-link.active::after { /* Active state */
+            width: 100%;
+        }
+
+        /* Responsive adjustments for mobile menu links */
+        .lg\:hidden .nav-link {
+            padding: 0.5rem 0;
+            width: fit-content;
+        }
+        
+        .btn-gradient {
+            background: var(--gradient);
+            color: white;
+            padding: 12px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap; /* Prevents button text wrapping */
+        }
+        
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .hero-section {
+            position: relative;
+            /* Responsive height */
+            height: 300px;
+            background: linear-gradient(rgba(0, 47, 103, 0.5), rgba(0, 47, 103, 0.5)), url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&h=700&fit=crop');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            /* margin-top: 80px; */ /* Handled by body padding */
+            padding: 1.5rem; /* Padding for mobile */
+        }
+        
+        .info-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(135deg, rgba(229, 178, 0, 0.3), rgba(0, 47, 103, 0.1)) border-box;
+            /* height: 100%; */ /* REMOVED this line to fix overlap */
+        }
+        
+        .info-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .facility-item {
+            display: flex;
+            align-items: center;
+            /* space: 16px; */ /* Handled by margin on icon */
+            margin-bottom: 16px;
+        }
+        
+        .facility-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+        
+        /* .split-section styles removed, now handled by Tailwind */
+        
+        .split-section img {
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            width: 100%; /* Ensure image is responsive */
+            height: auto; /* Maintain aspect ratio */
+            object-fit: cover; /* Cover the area nicely */
+            max-height: 500px; /* Optional: constrain height */
+        }
+        
+        @media (min-width: 768px) {
+            .hero-section {
+                height: 500px;
+            }
+        }
+
+        /* Responsive typography fallbacks */
+        @media (max-width: 767px) {
+            .text-6xl {
+                font-size: 2.5rem; /* 4xl */
+                line-height: 1.1;
+            }
+            .text-5xl {
+                font-size: 2.25rem; /* 3xl */
+            }
+            .text-2xl {
+                font-size: 1.125rem; /* xl */
+            }
+            .text-xl {
+                font-size: 1rem; /* base */
+            }
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-900">
+
+    <!-- Header -->
+   <header class="sticky-header glass-header bg-white/95 backdrop-blur-lg fixed top-0 left-0 w-full z-50 shadow-md border-b border-gray-200" id="mainHeader">
+      <div class="container mx-auto px-4 md:px-8 py-5 md:py-6">
+        <div class="flex items-center justify-between">
+          <!-- Logo -->
+          <div class="flex items-center space-x-3 flex-shrink-0">
+            <div class="w-36 md:w-40 flex items-center justify-center">
+              <!-- UPDATED to .webp -->
+              <img src="assets/logos/65.webp" alt="Nyati Plaza Logo" class="h-16 md:h-20 object-contain" onerror="this.src='https://placehold.co/160x80/f1f5f9/002F67?text=Nyati+Plaza'">
+            </div>
+          </div>
+    
+          <!-- Desktop Navigation -->
+          <nav class="hidden lg:flex items-center space-x-8 xl:space-x-12 font-medium">
+            <a href="index.html" class="nav-link text-[#002F67] hover:text-[#E5B200] transition">Home</a>
+            <a href="brands.html" class="nav-link text-[#002F67] hover:text-[#E5B200] transition">Brands</a>
+            <a href="dine.html" class="nav-link text-[#002F67] hover:text-[#E5B200] transition">Dine</a>
+            <a href="entertainment.html" class="nav-link text-[#002F67] hover:text-[#E5B200] transition">Entertainment</a>
+            <a href="gallery.html" class="nav-link text-[#002F67] hover:text-[#E5B200] transition">Gallery</a>
+            <a href="visitnyati.html" class="nav-link text-[#002F67] hover:text-[#E5B200] transition active">Visit Nyati</a> <!-- Set as active -->
+          </nav>
+    
+          <!-- Header Buttons & Mobile Toggle -->
+          <div class="flex items-center space-x-3 sm:space-x-5">
+            <button class="text-[#002F67] hover:text-[#E5B200] transition">
+              <i class="fas fa-search text-lg md:text-xl"></i>
+            </button>
+            <button class="hidden sm:block bg-[#002F67] text-white px-5 py-2 rounded-full font-semibold hover:bg-[#E5B200] hover:text-[#002F67] transition">Lease Space</button>
+            <!-- Mobile Menu Button -->
+            <button class="lg:hidden text-[#002F67] text-3xl" id="mobileMenuBtn" aria-label="Toggle menu">
+              <i class="fas fa-bars" id="menuIcon"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    
+      <!-- Mobile Menu -->
+      <div id="mobileMenu" class="lg:hidden hidden bg-white/95 text-[#002F67] transition-all duration-300 shadow-md">
+        <nav class="flex flex-col space-y-3 px-6 py-5 border-t border-gray-200 text-lg font-medium">
+          <a href="index.html" class="block hover:text-[#E5B200] transition">Home</a>
+          <a href="brands.html" class="block hover:text-[#E5B200] transition">Brands</a>
+          <a href="dine.html" class="block hover:text-[#E5B200] transition">Dine</a>
+          <a href="entertainment.html" class="block hover:text-[#E5B200] transition">Entertainment</a>
+          <a href="gallery.html" class="block hover:text-[#E5B200] transition">Gallery</a>
+          <a href="visitnyati.html" class="block hover:text-[#E5B200] transition">Visit Nyati</a>
+          <button class="mt-4 bg-[#002F67] text-white px-5 py-2 rounded-full font-semibold hover:bg-[#E5B200] hover:text-[#002F67] transition">Lease Space</button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="text-center">
+            <!-- Responsive typography -->
+            <h1 class="text-4xl sm:text-6xl font-black mb-4">Plan Your Visit</h1>
+            <p class="text-lg sm:text-2xl mb-8">Everything you need to know about Nyati Plaza</p>
+        </div>
+    </section>
+
+    <!-- Introduction -->
+    <section class="py-16 sm:py-20 bg-gradient-to-b from-white to-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 sm:mb-16">
+                <!-- Responsive typography -->
+                <h2 class="text-3xl sm:text-5xl font-black mb-6 text-[--primary]">Introducing Nyati Plaza</h2>
+                <p class="text-base sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                    Nyati Plaza is an edifice of innovation and excellence, a landmark development by the Nyati Group. Spanning 1.8 lakh sq ft with G+2 floors and over 130 retail units, it redefines retail real estate in Pune.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Facilities Section -->
+    <section class="py-16 sm:py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 sm:mb-16">
+                <!-- Responsive typography -->
+                <h2 class="text-3xl sm:text-5xl font-black mb-4">World-Class Facilities</h2>
+                <p class="text-base sm:text-xl text-gray-600">Everything for a perfect shopping experience</p>
+            </div>
+
+            <!-- Responsive split section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
+                <!-- Content column (order-2 on mobile, order-1 on md) -->
+                <div class="order-2 md:order-1">
+                    <div class="facility-item">
+                        <div class="facility-icon">📐</div>
+                        <div>
+                            <h3 class="font-bold text-lg">1.8 Lakh Sq.ft</h3>
+                            <p class="text-gray-600">Nett Leasable Area</p>
+                        </div>
+                    </div>
+
+                    <div class="facility-item">
+                        <div class="facility-icon">🏪</div>
+                        <div>
+                            <h3 class="font-bold text-lg">130+ Retail Units</h3>
+                            <p class="text-gray-600">Premium Brands</p>
+                        </div>
+                    </div>
+
+                    <div class="facility-item">
+                        <div class="facility-icon">🅿️</div>
+                        <div>
+                            <h3 class="font-bold text-lg">3 Levels Basement</h3>
+                            <p class="text-gray-600">Parking Available</p>
+                        </div>
+                    </div>
+
+                    <div class="facility-item">
+                        <div class="facility-icon">🏢</div>
+                        <div>
+                            <h3 class="font-bold text-lg">G+2 Floors</h3>
+                            <p class="text-gray-600">Modern Architecture</p>
+                        </div>
+                    </div>
+
+                    <div class="facility-item">
+                        <div class="facility-icon">⚡</div>
+                        <div>
+                            <h3 class="font-bold text-lg">100% Power Backup</h3>
+                            <p class="text-gray-600">24/7 Operations</p>
+                        </div>
+                    </div>
+
+                    <div class="facility-item">
+                        <div class="facility-icon">🚪</div>
+                        <div>
+                            <h3 class="font-bold text-lg">Two Grand Entrances</h3>
+                            <p class="text-gray-600">Easy Access</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image column (order-1 on mobile, order-2 on md) -->
+                <div class="order-1 md:order-2">
+                    <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=500&fit=crop" alt="Nyati Plaza Entrance" class="w-full h-auto max-h-[500px] object-cover rounded-2xl shadow-xl">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- High-End Retail Spaces -->
+    <section class="py-16 sm:py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 sm:mb-16">
+                <!-- Responsive typography -->
+                <h2 class="text-3xl sm:text-5xl font-black mb-4 text-[--primary]">Designed for Success</h2>
+                <p class="text-base sm:text-xl text-gray-600 max-w-3xl mx-auto">
+                    Nyati Plaza offers world-class retail spaces with 1000-feet frontage, ensuring unparalleled visibility and high-end ambience — the perfect environment for businesses to flourish.
+                </p>
+            </div>
+
+            <!-- Responsive grid -->
+            <!-- ADDED h-full to these cards for grid consistency -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="info-card h-full">
+                    <div class="text-4xl mb-4">👁️</div>
+                    <h3 class="text-2xl font-bold mb-3 text-[--primary]">High Brand Visibility</h3>
+                    <p class="text-gray-600">Premium location with maximum foot traffic and brand exposure</p>
+                </div>
+
+                <div class="info-card h-full">
+                    <div class="text-4xl mb-4">✨</div>
+                    <h3 class="text-2xl font-bold mb-3 text-[--primary]">Vibrant Ambience</h3>
+                    <p class="text-gray-600">Modern design and luxury interiors create an upscale shopping environment</p>
+                </div>
+
+                <div class="info-card h-full">
+                    <div class="text-4xl mb-4">☀️</div>
+                    <h3 class="text-2xl font-bold mb-3 text-[--primary]">Naturally Lit Premises</h3>
+                    <p class="text-gray-600">Abundant natural light enhances the shopping experience</p>
+                </div>
+
+
+                <div class="info-card h-full">
+                    <div class="text-4xl mb-4">🍽️</div>
+                    <h3 class="text-2xl font-bold mb-3 text-[--primary]">Food Court</h3>
+                    <p class="text-gray-600">100+ dining options for customers and staff</p>
+                </div>
+
+                <div class="info-card h-full">
+                    <div class="text-4xl mb-4">🛋️</div>
+                    <h3 class="text-2xl font-bold mb-3 text-[--primary]">Luxurious Seating</h3>
+                    <p class="text-gray-600">Premium lounges and rest areas throughout the mall</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map & Info -->
+    <section id="visit" class="py-16 sm:py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 sm:mb-16">
+                <!-- Responsive typography -->
+                <h2 class="text-3xl sm:text-5xl font-black mb-4">Location & Hours</h2>
+            </div>
+
+            <!-- Responsive grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="rounded-3xl overflow-hidden shadow-xl h-[450px]">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15129.906628550489!2d73.91788350090106!3d18.552537270752943!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c3cd0134647d%3A0xbff4f7d437e3d3d0!2sNYATI%20PLAZA!5e0!3m2!1sen!2sin!4v1761592427739!5m2!1sen!2sin" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+
+                <!-- These cards no longer have h-full and will stack normally -->
+                <div class="space-y-6">
+                    <div class="info-card">
+                        <h3 class="text-xl sm:text-2xl font-bold mb-4 text-[--primary]">📍 Address</h3>
+                        <p class="text-gray-600 text-base sm:text-lg">No. 12/1A, MundhwaKharadi Bypass, Kharadi South Main Road, Kharadi, Pune - 411014</p>
+                    </div>
+
+                    <div class="info-card">
+                        <h3 class="text-xl sm:text-2xl font-bold mb-4 text-[--primary]">🕐 Mall Hours</h3>
+                        <div class="space-y-2 text-gray-600 text-base sm:text-lg">
+                            <p><strong>Monday - Thursday:</strong> 10:00 AM - 10:00 PM</p>
+                            <p><strong>Friday - Sunday:</strong> 10:00 AM - 11:00 PM</p>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <h3 class="text-xl sm:text-2xl font-bold mb-4 text-[--primary]">📞 Contact</h3>
+                        <div class="space-y-2 text-gray-600 text-base sm:text-lg">
+                            <p><i class="fas fa-phone mr-2 text-[--accent]"></i>+91 91640 89089</p>
+                            <p><i class="fas fa-envelope mr-2 text-[--accent]"></i>info@nyatiplaza.com</p>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <h3 class="text-xl sm:text-2xl font-bold mb-4 text-[--primary]">🚇 Metro Access</h3>
+                        <p class="text-gray-600 text-base sm:text-lg">Connected to Nyati Plaza Metro Station - Blue Line Exit 3</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 sm:py-20 bg-gradient-to-r from-[#002F67] to-[#004C91]">
+        <div class="container mx-auto px-6 text-center text-white">
+            <!-- Responsive typography -->
+            <h2 class="text-3xl sm:text-5xl font-black mb-6">Ready to Visit?</h2>
+            <p class="text-lg sm:text-2xl mb-8">Book your space or plan your shopping experience today</p>
+            <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-4">
+                <button class="btn-gradient">
+                    <i class="fas fa-calendar-alt mr-2"></i>Book Site Visit
+                </button>
+                <button class="bg-white text-[--primary] px-8 py-3 sm:py-4 rounded-full font-bold hover:bg-gray-100 transition">
+                    <i class="fas fa-map-marker-alt mr-2"></i>Get Directions
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-b from-[#001F4D] to-[#002F67] text-white pt-16 pb-10 relative overflow-hidden">
+      <div class="container mx-auto px-6 relative z-10">
+        <!-- Top Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+          <!-- Brand / About -->
+          <div>
+            <div class="flex items-center space-x-3 mb-5">
+              <!-- UPDATED to .webp -->
+              <img src="assets/logos/65.webp" alt="Nyati Plaza Logo" class="h-14 object-contain" onerror="this.src='https://placehold.co/160x80/f1f5f9/002F67?text=Nyati+Plaza'">
+              <h3 class="text-2xl font-bold tracking-wide">Nyati Plaza</h3>
+            </div>
+            <p class="text-gray-300 leading-relaxed text-sm md:text-base">
+              Experience luxury shopping, fine dining, and entertainment at Pune’s most vibrant destination where lifestyle meets elegance.
+            </p>
+          </div>
+    
+          <!-- Explore -->
+          <div>
+            <h4 class="text-lg font-bold mb-5 text-[#E5B200] uppercase">Explore</h4>
+            <ul class="space-y-2 text-gray-300">
+              <li><a href="brands.html" class="hover:text-[#E5B200] transition">Brands Directory</a></li>
+              <li><a href="dine.html" class="hover:text-[#E5B200] transition">Dining Options</a></li>
+              <li><a href="entertainment.html" class="hover:text-[#E5B200] transition">Entertainment</a></li>
+              <li><a href="visitnyati.html" class="hover:text-[#E5B200] transition">Visit Info</a></li>
+            </ul>
+          </div>
+    
+          <!-- Visit -->
+          <div>
+            <h4 class="text-lg font-bold mb-5 text-[#E5B200] uppercase">Visit</h4>
+            <ul class="space-y-2 text-gray-300">
+              <li><a href="visitnyati.html" class="hover:text-[#E5B200] transition">Mall Hours</a></li>
+              <li><a href="visitnyati.html" class="hover:text-[#E5B200] transition">Parking Info</a></li>
+              <li><a href="visitnyati.html" class="hover:text-[#E5B200] transition">Mall Map</a></li>
+              <li><a href="visitnyati.html" class="hover:text-[#E5B200] transition">FAQs</a></li>
+            </ul>
+          </div>
+    
+          <!-- Contact + Social -->
+          <div>
+            <h4 class="text-lg font-bold mb-5 text-[#E5B200] uppercase">Contact</h4>
+            <ul class="space-y-3 text-gray-300 mb-6">
+              <li class="flex items-center"><i class="fas fa-phone text-[#E5B200] mr-3"></i> +91 9164089089</li>
+              <li class="flex items-center"><i class="fas fa-map-marker-alt text-[#E5B200] mr-3"></i> Pune, India</li>
+              <li class="flex items-center"><i class="fas fa-envelope text-[#E5B200] mr-3"></i> info@nyatiplaza.com</li>
+            </ul>
+    
+            <!-- Social Links Right Side -->
+            <div class="flex flex-wrap gap-4 justify-start lg:justify-start">
+              <a href="https://www.facebook.com/Nyatiplaza/" class="w-10 h-10 rounded-full bg-[#E5B200]/20 border border-[#E5B200] flex items-center justify-center hover:bg-[#E5B200] hover:text-[#001F4D] transition">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="https://www.instagram.com/nyatiplazamall" class="w-10 h-10 rounded-full bg-[#E5B200]/20 border border-[#E5B200] flex items-center justify-center hover:bg-[#E5B200] hover:text-[#001F4D] transition">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="https://www.youtube.com/@Nyatiplazapune" class="w-10 h-10 rounded-full bg-[#E5B200]/20 border border-[#E5B200] flex items-center justify-center hover:bg-[#E5B200] hover:text-[#001F4D] transition">
+                <i class="fab fa-youtube"></i>
+              </a>
+              <a href="https://www.linkedin.com/company/nyatiplaza" class="w-10 h-10 rounded-full bg-[#E5B200]/20 border border-[#E5B200] flex items-center justify-center hover:bg-[#E5B200] hover:text-[#001F4D] transition">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+    
+        <!-- Divider -->
+        <div class="border-t border-gray-600 my-8"></div>
+    
+        <!-- Bottom Copyright -->
+        <div class="flex flex-col md:flex-row items-center justify-between text-gray-400 text-xs sm:text-sm">
+          <p class="text-center md:text-left mb-3 md:mb-0">
+            © 2025 Nyati Plaza. All Rights Reserved.
+          </p>
+          <div class="space-x-3">
+            <a href="#" class="hover:text-white transition">Privacy Policy</a>
+            <span>|</span>
+            <a href="#" class="hover:text-white transition">Terms of Service</a>
+          </div>
+        </div>
+      </div>
+    
+      <!-- Decorative Blur Background -->
+      <div class="absolute top-0 right-0 w-64 h-64 bg-[#E5B200]/10 blur-3xl rounded-full -z-10"></div>
+      <div class="absolute bottom-0 left-0 w-64 h-64 bg-[#E5B200]/10 blur-3xl rounded-full -z-10"></div>
+    </footer>
+
+    <!-- Combined JavaScript -->
+    <script>
+        // --- Header Scroll Effect ---
+        const header = document.getElementById('mainHeader');
+        if (header) {
+            // This replaces the old logic with the class-based one
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+        }
+
+        // --- Mobile Menu & Body Padding Logic (from user file) ---
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuIcon = document.getElementById('menuIcon');
+
+            if (mobileMenuBtn && mobileMenu && menuIcon) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                    menuIcon.classList.toggle('fa-bars');
+                    menuIcon.classList.toggle('fa-times');
+                });
+            }
+
+            // Fix scrolling issue by ensuring no overflow restrictions remain
+            document.body.style.overflowY = 'auto';
+            document.documentElement.style.overflowY = 'auto';
+            document.body.style.height = 'auto';
+            document.documentElement.style.height = 'auto';
+
+            // Add spacing below navbar so content is visible and scrollable
+            const headerEl = document.getElementById('mainHeader');
+            if (headerEl) {
+                // Recalculate header height on resize for accuracy
+                let headerHeight = headerEl.offsetHeight;
+                document.body.style.paddingTop = headerHeight + 'px';
+
+                window.addEventListener('resize', () => {
+                    headerHeight = headerEl.offsetHeight;
+                    document.body.style.paddingTop = headerHeight + 'px';
+                });
+
+                // Reset hero margin-top as body padding handles it
+                const hero = document.querySelector('.hero-section');
+                if (hero) {
+                    hero.style.marginTop = '0px'; 
+                }
+            }
+        });
+
+        // --- Smooth Scroll for Anchor Links ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const href = this.getAttribute('href');
+                const target = document.querySelector(href);
+                
+                if (target) {
+                    const headerOffset = document.getElementById('mainHeader').offsetHeight || 90;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+
+                    // Close mobile menu if open
+                    const mobileMenu = document.getElementById('mobileMenu');
+                    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                        document.getElementById('menuIcon').classList.remove('fa-times');
+                        document.getElementById('menuIcon').classList.add('fa-bars');
+                    }
+                } else if (href.includes('.html')) {
+                    // Fallback for external page links
+                    window.location.href = href;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+

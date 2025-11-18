@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nyati Plaza - Where Pune Shops, Dines & Plays</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #002F67;
+            --accent: #E5B200;
+            --gradient: linear-gradient(135deg, #002F67 0%, #004a8f 50%, #0070b0 100%);
+            --text-dark: #0F1724;
+            --text-light: #ffffff;
+            --bg-light: #ffffff;
+            --bg-soft: #FAFBFD;
+            --shadow: 0 10px 30px rgba(0, 47, 103, 0.1);
+            --shadow-lg: 0 20px 40px rgba(0, 47, 103, 0.15);
+            --radius: 20px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            /* This ensures smooth scrolling works for anchor links */
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            background: var(--bg-light);
+            color: var(--text-dark);
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        .gradient-bg {
+            background: var(--gradient);
+        }
+        
+        .gradient-border {
+            border: 2px solid transparent;
+            background: linear-gradient(white, white) padding-box,
+                        var(--gradient) border-box;
+        }
+        
+        .glass-header {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 4px 20px rgba(0, 47, 103, 0.08);
+        }
+        
+        .smooth-transition {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after,
+        .nav-link.active::after { /* Active state for mobile */
+            width: 100%;
+        }
+
+        /* Responsive adjustments for mobile menu links */
+        .lg\:hidden .nav-link {
+            padding: 0.5rem 0;
+            width: fit-content;
+        }
+        
+        .sticky-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            /* Added padding for consistency */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        
+        .sticky-header.scrolled {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+        
+        .btn-gradient {
+            background: var(--gradient);
+            color: white;
+            padding: 12px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap; /* Prevents button text wrapping */
+        }
+        
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .btn-outline {
+            background: white;
+            color: var(--primary);
+            padding: 12px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            border: 2px solid var(--primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap; /* Prevents button text wrapping */
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .hero-carousel {
+            position: relative;
+            /* height: 100%; */ /* Height is now controlled by Tailwind classes */
+            overflow: hidden;
+        }
+        
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1.2s ease-in-out;
+        }
+        
+        .hero-slide.active {
+            opacity: 1;
+            animation: fadeZoom 8s ease-out forwards;
+            position: relative; /* Fix for active slide layout */
+        }
+        
+        @keyframes fadeZoom {
+            from {
+                transform: scale(1);
+                opacity: 1;
+            }
+            to {
+                transform: scale(1.08);
+                opacity: 1;
+            }
+        }
+        
+        .hero-text {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .brand-tile {
+            background: white;
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(135deg, rgba(229, 178, 0, 0.3), rgba(0, 47, 103, 0.1)) border-box;
+        }
+        
+        .brand-tile:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .search-bar {
+            background: white;
+            border-radius: 60px;
+            padding: 20px 32px;
+            box-shadow: var(--shadow);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .search-bar:focus-within {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .category-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        .carousel-container {
+            display: flex;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: none; /* Firefox */
+            gap: 24px;
+        }
+        
+        .carousel-container::-webkit-scrollbar {
+            display: none; /* Safari and Chrome */
+        }
+        
+        .card-tilt {
+            transition: transform 0.3s ease;
+        }
+        
+        .card-tilt:hover {
+            transform: perspective(1000px) rotateY(5deg);
+        }
+        
+        .mosaic-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        
+        .mosaic-large {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+        
+        .image-overlay {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius);
+        }
+        
+        .image-overlay::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 47, 103, 0.7) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .image-overlay:hover::after {
+            opacity: 1;
+        }
+        
+        .image-overlay .overlay-text {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.5rem;
+            z-index: 10;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        
+        .image-overlay:hover .overlay-text {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .counter {
+            /* Responsive font size */
+            font-size: 2.5rem; /* 4xl */
+            font-weight: 900;
+            color: white;
+            text-shadow: 0 0 20px rgba(229, 178, 0, 0.3);
+        }
+        
+        .gallery-item {
+            border-radius: var(--radius);
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.03);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .gallery-item img {
+            display: block;
+            width: 100%;
+            height: 100%; /* Changed from auto for grid consistency */
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .gradient-strip {
+            padding: 5rem 0;
+            background: var(--gradient);
+        }
+        
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        .auto-scroll {
+            animation: scroll 40s linear infinite;
+        }
+
+        .luxury-section {
+            background: linear-gradient(180deg, #001a3d 0%, #002F67 100%);
+            padding: 5rem 0;
+        }
+        
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .event-card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .event-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .bounce-animation {
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .flip-card {
+            background-color: transparent;
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            border-radius: var(--radius);
+        }
+        .flip-card-front {
+            background-color: white;
+        }
+        .flip-card-back {
+            background: var(--gradient);
+            color: white;
+            transform: rotateY(180deg);
+            padding: 20px;
+        }
+
+        .service-card {
+            background: var(--bg-soft);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .service-card:hover {
+            background: white;
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-10px);
+        }
+        .service-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- Responsive Overrides --- */
+        @media (min-width: 640px) {
+            .counter {
+                font-size: 3.5rem; /* 6xl */
+            }
+        }
+
+        @media (max-width: 1023px) {
+             /* Sticky header padding on scroll */
+            .sticky-header.scrolled {
+                padding-top: 0.5rem;
+                padding-bottom: 0.5rem;
+            }
+        }
+
+        @media (max-width: 767px) {
+            /* Mosaic grid stacking */
+            .mosaic-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .mosaic-large {
+                grid-column: span 1;
+                grid-row: span 1;
+            }
+            
+            /* Counter font size already set */
+            
+            .gallery-grid-container {
+                grid-template-columns: 1fr;
+            }
+
+            /* Responsive hero text */
+            #heroMainHeading {
+                font-size: 2.5rem; /* 4xl */
+                line-height: 1.1;
+            }
+
+            /* Responsive section headings */
+            .text-5xl {
+                font-size: 2.25rem; /* 3xl */
+            }
+            .text-4xl {
+                font-size: 1.875rem; /* 2xl */
+            }
+            .text-xl {
+                font-size: 1rem; /* base */
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .gallery-grid-container {
+                 grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-900">
+
+    <!-- Header -->
+  <header class="sticky-header glass-header bg-white/95 backdrop-blur-lg fixed top-0 left-0 w-full z-50 shadow-md border-b border-gray-200" id="mainHeader">
+      <div class="container mx-auto px-4 md:px-8"> <!-- Removed py-5 md:py-6, handled by style tag -->
+        <div class="flex items-center justify-between">
+          <!-- Logo -->
+          <div class="flex items-center space-x-3 flex-shrink-0">
+            <div class="w-36 md:w-40 flex items-center justify-center">
+              <!-- UPDATED to .webp -->
+              <img src="assets/logos/65.webp" alt="Nyati Plaza Logo" class="h-16 md:h-20 object-contain" onerror="this.src='https://placehold.co/160x80/f1f5f9/002F67?text=Nyati+Plaza'">
+            </div>
+          </div>
+    
+          <!-- Desktop Navigation -->
+          <nav class="hidden lg:flex items-center space-x-8 xl:space-x-12 font-medium">
+            <a href="index.html" class="nav-link text-[#002F67] hover:text-[#E5B200] transition active">Home</a> <!-- Set as active -->
+            <a href="brands.html" class="nav-link text-[#002F67] hover:text-[#E5B200] transition">Brands</a>
+            <a href="dine.html" class="nav-link text-[#002F67] hover:text-[#E5B200] transition">Dine</a>
+            <a href="entertainment.html" class="nav-link text-[#002F67] hover:text-[#E5B200] transition">Entertainment</a>
+            <a href="gallery.html" class="nav-link text-[#002F67] hover:text-[#E5B200] transition">Gallery</a>
+            <a href="visitnyati.html" class="nav-link text-[#002F67] hover:text-[#E5B200] transition">Visit Nyati</a>
+          </nav>
+    
+          <!-- Header Buttons & Mobile Toggle -->
+          <div class="flex items-center space-x-3 sm:space-x-5">
+            <button class="text-[#002F67] hover:text-[#E5B200] transition">
+              <i class="fas fa-search text-lg md:text-xl"></i>
+            </button>
+            <button class="hidden sm:block bg-[#002F67] text-white px-5 py-2 rounded-full font-semibold hover:bg-[#E5B200] hover:text-[#002F67] transition">Lease Space</button>
+            <!-- Mobile Menu Button -->
+            <button class="lg:hidden text-[#002F67] text-3xl" id="mobileMenuBtn" aria-label="Toggle menu">
+              <i class="fas fa-bars" id="menuIcon"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    
+      <!-- Mobile Menu -->
+      <div id="mobileMenu" class="lg:hidden hidden bg-white/95 text-[#002F67] transition-all duration-300 shadow-md">
+        <nav class="flex flex-col space-y-3 px-6 py-5 border-t border-gray-200 text-lg font-medium">
+          <a href="index.html" class="nav-link block hover:text-[#E5B200] transition active">Home</a>
+          <a href="brands.html" class="nav-link block hover:text-[#E5B200] transition">Brands</a>
+          <a href="dine.html" class="nav-link block hover:text-[#E5B200] transition">Dine</a>
+          <a href="entertainment.html" class="nav-link block hover:text-[#E5B200] transition">Entertainment</a>
+          <a href="gallery.html" class="nav-link block hover:text-[#E5B200] transition">Gallery</a>
+          <a href="visitnyati.html" class="nav-link block hover:text-[#E5B200] transition">Visit Nyati</a>
+          <button class="mt-4 bg-[#002F67] text-white px-5 py-2 rounded-full font-semibold hover:bg-[#E5B200] hover:text-[#002F67] transition">Lease Space</button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <!-- Removed inline style margin-top, handled by body padding -->
+    <section id="home" class="relative flex items-center bg-gradient-to-b from-white to-blue-50 pt-12 pb-12 lg:pt-0 lg:pb-0" style="padding-top: 0; min-height: calc(100vh - 88px);">
+      <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 items-center">
+    
+          <!-- Left: Hero Carousel -->
+          <div class="lg:col-span-3 order-1 lg:order-1">
+            <!-- Responsive height for carousel -->
+            <div class="hero-carousel rounded-3xl overflow-hidden shadow-2xl border-4 border-[#002F67]/20 h-[400px] sm:h-[500px] lg:h-[600px]">
+              <div class="hero-slide active">
+                <!-- UPDATED to .webp -->
+                <img src="assets/IMAGES/IMG_3227.webp" alt="City Pride Theatre" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/002F67/ffffff?text=Theatre'">
+              </div>
+              <div class="hero-slide">
+                <!-- UPDATED to .webp -->
+                <img src="assets/shops_photo/fashionworld.jpg" alt="Fashion" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/002F67/ffffff?text=Fashion'">
+              </div>
+              <div class="hero-slide">
+                <!-- UPDATED to .webp -->
+                <img src="assets/plazainternal/DSC04998.webp" alt="Dining" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x600/002F67/ffffff?text=Dining'">
+              </div>
+            </div>
+          </div>
+    
+          <!-- Right: Hero Content -->
+          <!-- Responsive padding -->
+          <div class="lg:col-span-2 order-2 lg:order-2 bg-white p-6 md:p-12 rounded-3xl shadow-xl border-4 border-[#002F67]/20 relative transition-all duration-500">
+    
+            <!-- Main headline that changes dynamically -->
+            <!-- Responsive typography -->
+            <h1 id="heroMainHeading" class="text-4xl sm:text-5xl font-black mb-6 leading-tight text-[#002F67] font-[PlayfairDisplay] transition-all duration-500">
+              Where Pune Shops, Dines & Plays
+            </h1>
+    
+            <!-- Static subheadline (remains fixed) -->
+            <p class="text-lg sm:text-xl text-gray-600 mb-8 leading-relaxed font-[Poppins]">
+              Luxury retail, gourmet dining & entertainment — all under one roof.
+            </p>
+    
+            <!-- Buttons -->
+            <!-- Responsive button layout -->
+            <div class="flex flex-col sm:flex-row gap-4 mb-8">
+              <button class="btn-gradient w-full sm:w-auto" onclick="document.getElementById('gallery').scrollIntoView({behavior: 'smooth'});">
+                <i class="fas fa-compass mr-2"></i>Explore the Mall
+              </button>
+             
+            </div>
+    
+            <!-- Stats -->
+            <!-- Responsive stats spacing -->
+            <div class="flex items-center justify-center space-x-4 sm:space-x-6 pt-6 border-t border-gray-200">
+              <div class="text-center">
+                <p class="text-2xl font-black text-[#E5B200]">250+</p>
+                <p class="text-xs text-gray-600">Brands</p>
+              </div>
+              <div class="w-px h-12 bg-gray-300"></div>
+              <div class="text-center">
+                <p class="text-2xl font-black text-[#E5B200]">50000+</p>
+                <p class="text-xs text-gray-600">Monthly Visitors</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <style>
+        /* .hero-slide.active position: relative is handled in main CSS */
+      </style>
+    
+      <script>
+        // Hero carousel - Only main heading changes
+        document.addEventListener('DOMContentLoaded', () => {
+          let currentSlide = 0;
+          const slides = document.querySelectorAll('.hero-slide');
+          const headings = [
+            'Where Kharadi watches its favorite movies in style.',
+            'Where Pune shops the latest trends & luxury labels.',
+            'Where taste meets ambience — dine, sip & unwind.'
+          ];
+          const heroMainHeading = document.getElementById('heroMainHeading');
+    
+          function nextSlide() {
+            if (slides.length === 0) return; // Guard clause
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+    
+            // Change only main heading
+            if (heroMainHeading) {
+                heroMainHeading.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => {
+                heroMainHeading.textContent = headings[currentSlide];
+                heroMainHeading.classList.remove('opacity-0', 'translate-y-2');
+                heroMainHeading.classList.add('opacity-100', 'translate-y-0');
+                }, 300);
+            }
+          }
+    
+          setInterval(nextSlide, 4000);
+        });
+      </script>
+    </section>
+
+
+    <!-- Quick Search -->
+    <section class="py-16 sm:py-20 bg-gradient-to-b from-white to-gray-50">
+      <div class="container mx-auto px-6">
+        <div class="max-w-4xl mx-auto text-center">
+          <!-- Title -->
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-[#002F67] mb-6 font-[PlayfairDisplay]">
+            Explore Categories
+          </h2>
+          <p class="text-base sm:text-lg text-gray-600 mb-10 font-[Poppins]">
+            Discover your favorite experiences at Nyati Plaza
+          </p>
+    
+          <!-- Filter Buttons -->
+          <!-- Responsive gap -->
+          <div class="flex flex-wrap justify-center gap-3 sm:gap-6">
+            <button onclick="scrollToSection('dining')" class="filter-btn">
+              <i class="fas fa-utensils mr-2"></i> Dining & Restaurants
+            </button>
+            <button onclick="scrollToSection('brands')" class="filter-btn">
+              <i class="fas fa-tshirt mr-2"></i> Fashion & Accessories
+            </button>
+            <button onclick="scrollToSection('entertainment')" class="filter-btn">
+              <i class="fas fa-film mr-2"></i> Theatres & Entertainment
+            </button>
+            <button onclick="scrollToSection('brands')" class="filter-btn">
+              <i class="fas fa-shopping-bag mr-2"></i> Shopping Stores
+            </button>
+            <button onclick="scrollToSection('luxury')" class="filter-btn">
+              <i class="fas fa-gem mr-2"></i> Jewellery & Luxury
+            </button>
+            <button onclick="scrollToSection('offers')" class="filter-btn">
+              <i class="fas fa-tags mr-2"></i> Offers & Discounts
+            </button>
+          </div>
+        </div>
+      </div>
+    
+      <style>
+        .filter-btn {
+          background: white;
+          border: 2px solid #002F67;
+          color: #002F67;
+          /* Responsive padding */
+          padding: 0.5rem 1rem; /* 8px 16px */
+          font-size: 0.875rem; /* 14px */
+          border-radius: 9999px;
+          font-weight: 600;
+          transition: all 0.3s ease;
+          display: flex;
+          align-items: center;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        @media (min-width: 640px) {
+            .filter-btn {
+                padding: 0.75rem 1.5rem; /* 12px 24px */
+                font-size: 1rem; /* 16px */
+            }
+        }
+    
+        .filter-btn:hover {
+          background: #002F67;
+          color: white;
+          transform: translateY(-3px);
+          box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+        }
+      </style>
+    
+      <script>
+        // Smooth scroll to corresponding section
+        function scrollToSection(sectionId) {
+          const section = document.getElementById(sectionId);
+          if (section) {
+            // Adjust offset for sticky header
+            const headerOffset = 90;
+            const elementPosition = section.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+          } else {
+            console.warn('Section not found:', sectionId);
+          }
+        }
+      </script>
+    </section>
+
+
+    <!-- Featured Brands -->
+    <section id="brands" class="py-16 sm:py-20 bg-gray-50">
+        <div class="container mx-auto px-6 text-black">
+            <div class="text-center mb-12 sm:mb-16">
+                <h2 class="text-3xl sm:text-5xl font-black mb-4">Shop Leading Labels</h2>
+                <p class="text-base sm:text-xl text-gray-600">Discover 250+ premium brands under one roof</p>
+            </div>
+            
+            <!-- Responsive grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div class="brand-tile">
+                    <!-- UPDATED to .webp -->
+                    <img src="assets/shops_photo/mudrika.jpg" alt="Mudrika" class="w-full h-24 object-contain mb-4" onerror="this.src='https://placehold.co/300x100/f1f5f9/64748b?text=Mudrika'">
+                    <h3 class="text-center font-semibold text-gray-800">Mudrika Womens Ethnic Wear</h3>
+                </div>
+                
+                <div class="brand-tile">
+                    <!-- UPDATED to .webp -->
+                    <img src="assets/shops_photo/reliance.webp" alt="Reliance Fashion World" class="w-full h-24 object-contain mb-4" onerror="this.src='https://placehold.co/300x100/f1f5f9/64748b?text=Reliance'">
+                    <h3 class="text-center font-semibold text-gray-800">Reliance Fashion World</h3>
+                </div>
+                
+                <div class="brand-tile">
+                    <!-- UPDATED to .webp -->
+                    <img src="assets/shops_photo/titanwatch.webp" alt="Titan" class="w-full h-24 object-contain mb-4" onerror="this.src='https://placehold.co/300x100/f1f5f9/64748b?text=Titan'">
+                    <h3 class="text-center font-semibold text-gray-800">Titan</h3>
+                </div>
+                
+                <div class="brand-tile">
+                    <!-- UPDATED to .webp -->
+                    <img src="assets/shops_photo/mamaearth.webp" alt="MamaEarth" class="w-full h-24 object-contain mb-4" onerror="this.src='https://placehold.co/300x100/f1f5f9/64748b?text=MamaEarth'">
+                    <h3 class="text-center font-semibold text-gray-800">MamaEarth</h3>
+                </div>
+                
+                <div class="brand-tile">
+                    <!-- UPDATED to .webp -->
+                    <img src="assets/shops_photo/indianterrain.webp" alt="Indian Terrain" class="w-full h-24 object-contain mb-4" onerror="this.src='https://placehold.co/300x100/f1f5f9/64748b?text=Indian+Terrain'">
+                    <h3 class="text-center font-semibold text-gray-800">Indian Terrain</h3>
+                </div>
+                
+                <div class="brand-tile">
+                    <!-- UPDATED to .webp -->
+                    <img src="/assets/shops_photo/stylox menas apparel.webp" alt="Stylox" class="w-full h-24 object-contain mb-4" onerror="this.src='https://placehold.co/300x100/f1f5f9/64748b?text=Stylox'">
+                    <h3 class="text-center font-semibold text-gray-800">Stylox Mens Apparels</h3>
+                </div>
+                
+                <!-- Responsive span for special tile -->
+                <div class="brand-tile gradient-bg flex items-center justify-center sm:col-span-2 lg:col-span-2 lg:row-span-2 min-h-[200px] lg:min-h-0">
+  <div class="text-center text-black">
+      <i class="fas fa-shopping-bag text-4xl sm:text-6xl mb-4"></i>
+      <h3 class="text-2xl sm:text-3xl font-black mb-2">Shop Leading Labels</h3>
+      <p class="text-base sm:text-lg">250+ Premium Brands</p>
+  </div>
+</div>
+
+                
+                <div class="brand-tile">
+                    <!-- UPDATED to .webp -->
+                    <img src="/assets/shops_photo/LENSKART.webp" alt="Lenskart" class="w-full h-24 object-contain mb-4" onerror="this.src='https://placehold.co/300x100/f1f5f9/64748b?text=Lenskart'">
+                    <h3 class="text-center font-semibold text-gray-800">Lenskart</h3>
+                </div>
+                
+                <div class="brand-tile">
+                    <!-- UPDATED to .webp -->
+                    <img src="/assets/shops_photo/MINISO.webp" alt="Miniso" class="w-full h-24 object-contain mb-4" onerror="this.src='https://placehold.co/300x100/f1f5f9/64748b?text=Miniso'">
+                    <h3 class="text-center font-semibold text-gray-800">Miniso</h3>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <button class="btn-gradient" onclick="window.location.href='brands.html';">
+                    View All Brands <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upcoming Brands -->
+   
+<section id="offers" class="relative overflow-hidden bg-gradient-to-r from-[#002F67] via-[#003F88] to-[#005EA6] py-16 sm:py-24">
+  <div class="container mx-auto px-6 sm:px-8">
+    <div class="text-center mb-12 sm:mb-16">
+      <h2 class="text-3xl sm:text-5xl font-extrabold text-white mb-4 font-[PlayfairDisplay] tracking-wide drop-shadow-lg">
+       Arrivals & Launches 
+      </h2>
+      <p class="text-base sm:text-xl text-white/80 font-[Poppins]">
+        Fresh arrivals and exciting launches await you
+      </p>
+    </div>
+
+    <!-- Auto Scrolling Section -->
+    <div class="relative overflow-hidden rounded-3xl border-4 border-black/10 shadow-2xl">
+      <!-- Increased width to 400% to account for both groups -->
+      <div class="flex auto-scroll space-x-6 sm:space-x-8 px-4 py-2" style="width: 400%; animation: scroll 45s linear infinite;">
+        
+        <!-- Group 1 -->
+        <div class="flex space-x-6 sm:space-x-8">
+          <!-- CARD TEMPLATE -->
+          <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-xl flex-shrink-0 w-72 sm:w-80 hover:scale-105 transition-transform duration-500">
+            <span class="inline-block px-4 py-2 bg-green-600 text-white text-xs font-bold rounded-full mb-4">NOW OPEN</span>
+            <!-- UPDATED to .webp -->
+            <img src="/assets/shops_photo/BLUESTONE.webp" alt="Bluestone" class="w-full h-32 object-contain mb-4" onerror="this.src='https://placehold.co/300x130/f1f5f9/64748b?text=Bluestone'">
+            <h3 class="text-xl font-bold text-[#002F67] mb-2 font-[Poppins]">Bluestone</h3>
+            <p class="text-gray-600">Fine Jewellery</p>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-xl flex-shrink-0 w-72 sm:w-80 hover:scale-105 transition-transform duration-500">
+            <span class="inline-block px-4 py-2 bg-green-600 text-white text-xs font-bold rounded-full mb-4">NOW OPEN</span>
+            <!-- UPDATED to .webp -->
+            <img src="/assets/shops_photo/baggit.webp" alt="Baggit" class="w-full h-32 object-contain mb-4" onerror="this.src='https://placehold.co/300x130/f1f5f9/64748b?text=Baggit'">
+            <h3 class="text-xl font-bold text-[#002F67] mb-2 font-[Poppins]">Baggit</h3>
+            <p class="text-gray-600">Premium Bags</p>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-xl flex-shrink-0 w-72 sm:w-80 hover:scale-105 transition-transform duration-500">
+            <span class="inline-block px-4 py-2 bg-green-600 text-white text-xs font-bold rounded-full mb-4">NOW OPEN</span>
+            <!-- UPDATED to .webp -->
+            <img src="/assets/shops_photo/reliancenew.webp" alt="Reliance Fashion" class="w-full h-32 object-contain mb-4" onerror="this.src='https://placehold.co/300x130/f1f5f9/64748b?text=Reliance'">
+            <h3 class="text-xl font-bold text-[#002F67] mb-2 font-[Poppins]">Reliance Fashion World</h3>
+            <p class="text-gray-600">Fashion</p>
+          </div>
+          
+          <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-xl flex-shrink-0 w-72 sm:w-80 hover:scale-105 transition-transform duration-500">
+            <span class="inline-block px-4 py-2 bg-green-600 text-white text-xs font-bold rounded-full mb-4">NOW OPEN</span>
+            <!-- UPDATED to .webp -->
+            <img src="assets/shops_photo/cuddleskids.webp" alt="Cuddles Kids Wear" class="w-full h-32 object-contain mb-4" onerror="this.src='https://placehold.co/300x130/f1f5f9/64748b?text=Cuddles'">
+            <h3 class="text-xl font-bold text-[#002F67] mb-2 font-[Poppins]">Cuddles Kids Wear</h3>
+            <p class="text-gray-600">Kids Cloth</p>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-xl flex-shrink-0 w-72 sm:w-80 hover:scale-105 transition-transform duration-500">
+            <span class="inline-block px-4 py-2 bg-green-600 text-white text-xs font-bold rounded-full mb-4">NOW OPEN</span>
+            <!-- UPDATED to .webp -->
+            <img src="assets/shops_photo/leecopeer.webp" alt="Lee Cooper" class="w-full h-32 object-contain mb-4" onerror="this.src='https://placehold.co/300x130/f1f5f9/64748b?text=Lee+Cooper'">
+            <h3 class="text-xl font-bold text-[#002F67] mb-2 font-[Poppins]"> Lee Cooper </h3>
+            <p class="text-gray-600">Premium Cloth</p>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-xl flex-shrink-0 w-72 sm:w-80 hover:scale-105 transition-transform duration-500">
+            <span class="inline-block px-4 py-2 bg-green-600 text-white text-xs font-bold rounded-full mb-4">NOW OPEN</span>
+            <!-- UPDATED to .webp -->
+            <img src="assets/shops_photo/ajmal perfumes.webp" alt="Ajmal Perfumes" class="w-full h-32 object-contain mb-4" onerror="this.src='https://placehold.co/300x130/f1f5f9/64748b?text=Ajmal'">
+            <h3 class="text-xl font-bold text-[#002F67] mb-2 font-[Poppins]">Ajmal</h3>
+            <p class="text-gray-600">Perfumes</p>
+          </div>
+        </div>
+
+        <!-- Group 2 (Duplicate for seamless loop) -->
+        <div class="flex space-x-6 sm:space-x-8">
+          <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-xl flex-shrink-0 w-72 sm:w-80 hover:scale-105 transition-transform duration-500">
+            <span class="inline-block px-4 py-2 bg-green-600 text-white text-xs font-bold rounded-full mb-4">NOW OPEN</span>
+            <!-- UPDATED to .webp -->
+            <img src="/assets/shops_photo/BLUESTONE.webp" alt="Bluestone" class="w-full h-32 object-contain mb-4" onerror="this.src='https://placehold.co/300x130/f1f5f9/64748b?text=Bluestone'">
+            <h3 class="text-xl font-bold text-[#002F67] mb-2 font-[Poppins]">Bluestone</h3>
+            <p class="text-gray-600">Fine Jewellery</p>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-xl flex-shrink-0 w-72 sm:w-80 hover:scale-105 transition-transform duration-500">
+            <span class="inline-block px-4 py-2 bg-green-600 text-white text-xs font-bold rounded-full mb-4">NOW OPEN</span>
+            <!-- UPDATED to .webp -->
+            <img src="/assets/shops_photo/baggit.webp" alt="Baggit" class="w-full h-32 object-contain mb-4" onerror="this.src='https://placehold.co/300x130/f1f5f9/64748b?text=Baggit'">
+            <h3 class="text-xl font-bold text-[#002F67] mb-2 font-[Poppins]">Baggit</h3>
+            <p class="text-gray-600">Premium Bags</p>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-xl flex-shrink-0 w-72 sm:w-80 hover:scale-105 transition-transform duration-500">
+            <span class="inline-block px-4 py-2 bg-green-600 text-white text-xs font-bold rounded-full mb-4">NOW OPEN</span>
+            <!-- UPDATED to .webp -->
+            <img src="/assets/shops_photo/reliancenew.webp" alt="Reliance Fashion" class="w-full h-32 object-contain mb-4" onerror="this.src='https://placehold.co/300x130/f1f5f9/64748b?text=Reliance'">
+            <h3 class="text-xl font-bold text-[#002F67] mb-2 font-[Poppins]">Reliance Fashion World</h3>
+            <p class="text-gray-600">Fashion</p>
+          </div>
+          
+          <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-xl flex-shrink-0 w-72 sm:w-80 hover:scale-105 transition-transform duration-500">
+            <span class="inline-block px-4 py-2 bg-green-600 text-white text-xs font-bold rounded-full mb-4">NOW OPEN</span>
+            <!-- UPDATED to .webp -->
+            <img src="assets/shops_photo/cuddleskids.webp" alt="Cuddles Kids Wear" class="w-full h-32 object-contain mb-4" onerror="this.src='https://placehold.co/300x130/f1f5f9/64748b?text=Cuddles'">
+            <h3 class="text-xl font-bold text-[#002F67] mb-2 font-[Poppins]">Cuddles Kids Wear</h3>
+            <p class="text-gray-600">Kids Cloth</p>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-xl flex-shrink-0 w-72 sm:w-80 hover:scale-105 transition-transform duration-500">
+            <span class="inline-block px-4 py-2 bg-green-600 text-white text-xs font-bold rounded-full mb-4">NOW OPEN</span>
+            <!-- UPDATED to .webp -->
+            <img src="assets/shops_photo/leecopeer.webp" alt="Lee Cooper" class="w-full h-32 object-contain mb-4" onerror="this.src='https://placehold.co/300x130/f1f5f9/64748b?text=Lee+Cooper'">
+            <h3 class="text-xl font-bold text-[#002F67] mb-2 font-[Poppins]"> Lee Cooper </h3>
+            <p class="text-gray-600">Premium Cloth</p>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-xl flex-shrink-0 w-72 sm:w-80 hover:scale-105 transition-transform duration-500">
+            <span class="inline-block px-4 py-2 bg-green-600 text-white text-xs font-bold rounded-full mb-4">NOW OPEN</span>
+            <!-- UPDATED to .webp -->
+            <img src="assets/shops_photo/ajmal perfumes.webp" alt="Ajmal Perfumes" class="w-full h-32 object-contain mb-4" onerror="this.src='https://placehold.co/300x130/f1f5f9/64748b?text=Ajmal'">
+            <h3 class="text-xl font-bold text-[#002F67] mb-2 font-[Poppins]">Ajmal</h3>
+            <p class="text-gray-600">Perfumes</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+    <!-- Dining & Gourmet -->
+  
+<section id="dining" class="py-16 sm:py-24 bg-gradient-to-b from-[#f0f6ff] to-white relative overflow-hidden">
+  <div class="container mx-auto px-0 sm:px-8"> <!-- Full width on mobile for carousel peek -->
+    <div class="text-center mb-12 sm:mb-16 px-6">
+      <h2 class="text-3xl sm:text-5xl font-black mb-4 text-[#002F67]">Your Dining Spot Awaits</h2>
+      <p class="text-base sm:text-xl text-gray-600">100+ Food & Beverage Outlets</p>
+    </div>
+
+    <!-- Carousel Wrapper (position:relative for arrows) -->
+    <div class="relative">
+      <!-- Left Arrow -->
+      <button aria-label="previous" class="carousel-arrow left-2 sm:left-4 md:left-2 lg:left-6 absolute top-1/2 -translate-y-1/2 z-30 bg-white border-4 border-[#002F67] text-[#002F67] p-3 sm:p-4 rounded-full shadow-xl hover:bg-[#002F67] hover:text-white transition-all duration-300" onclick="scrollCarousel('dining', -1)">
+        <i class="fas fa-chevron-left text-base sm:text-lg"></i>
+      </button>
+
+      <!-- Right Arrow -->
+      <button aria-label="next" class="carousel-arrow right-2 sm:right-4 md:right-2 lg:right-6 absolute top-1/2 -translate-y-1/2 z-30 bg-white border-4 border-[#002F67] text-[#002F67] p-3 sm:p-4 rounded-full shadow-xl hover:bg-[#002F67] hover:text-white transition-all duration-300" onclick="scrollCarousel('dining', 1)">
+        <i class="fas fa-chevron-right text-base sm:text-lg"></i>
+      </button>
+        
+      <!-- Carousel (scroll-snap) -->
+      <!-- Responsive padding for peeking cards -->
+      <div id="diningCarousel" class="carousel-container flex items-stretch gap-6 sm:gap-8 overflow-x-auto scroll-smooth snap-x snap-mandatory px-6 sm:px-8 py-4" tabindex="0" style="-webkit-overflow-scrolling:touch;">
+
+        <!-- Card -->
+        <!-- Responsive card width -->
+        <div class="flex-shrink-0 w-[85vw] sm:w-80 md:w-96 snap-start border-4 border-[#002F67]/30 rounded-3xl overflow-hidden bg-white shadow-xl hover:shadow-2xl transition-transform duration-300 hover:-translate-y-2">
+          <!-- UPDATED to .webp -->
+          <img src="assets/shops_photo/purnabrahma.webp" alt="Purnabrahma" class="w-full h-48 sm:h-56 object-cover" onerror="this.src='https://placehold.co/400x220/f1f5f9/64748b?text=Purnabrahma'">
+          <div class="p-4 sm:p-6">
+            <h3 class="text-xl sm:text-2xl font-bold mb-2 text-[#002F67]">Purnabrahma</h3>
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-[#002F67]">Ground Floor</span>
+              <div class="flex items-center text-yellow-500"><i class="fas fa-star"></i><span class="ml-1 font-semibold">4.5</span></div>
+            </div>
+          </div>
+        </div>
+
+         <div class="flex-shrink-0 w-[85vw] sm:w-80 md:w-96 snap-start border-4 border-[#002F67]/30 rounded-3xl overflow-hidden bg-white shadow-xl hover:shadow-2xl transition-transform duration-300 hover:-translate-y-2">
+          <!-- UPDATED to .webp -->
+          <img src="assets/shops_photo/taikenpanasiancuisuine.webp" alt="Taiken Pan Asian Cuisine" class="w-full h-48 sm:h-56 object-cover" onerror="this.src='https://placehold.co/400x220/f1f5f9/64748b?text=Taiken'">
+          <div class="p-4 sm:p-6">
+            <h3 class="text-xl sm:text-2xl font-bold mb-2 text-[#002F67]">Taiken Pan Asian Cuisine</h3>
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-[#002F67]">Ground Floor</span>
+              <div class="flex items-center text-yellow-500"><i class="fas fa-star"></i><span class="ml-1 font-semibold">4.9</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex-shrink-0 w-[85vw] sm:w-80 md:w-96 snap-start border-4 border-[#002F67]/30 rounded-3xl overflow-hidden bg-white shadow-xl hover:shadow-2xl transition-transform duration-300 hover:-translate-y-2">
+          <!-- UPDATED to .webp -->
+          <img src="assets/shops_photo/candyworld.webp" alt="Candy World" class="w-full h-48 sm:h-56 object-cover" onerror="this.src='https://placehold.co/400x220/f1f5f9/64748b?text=Candy+World'">
+          <div class="p-4 sm:p-6">
+            <h3 class="text-xl sm:text-2xl font-bold mb-2 text-[#002F67]">Candy World</h3>
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-[#002F67]">Ground Floor</span>
+              <div class="flex items-center text-yellow-500"><i class="fas fa-star"></i><span class="ml-1 font-semibold">4.8</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex-shrink-0 w-[85vw] sm:w-80 md:w-96 snap-start border-4 border-[#002F67]/30 rounded-3xl overflow-hidden bg-white shadow-xl hover:shadow-2xl transition-transform duration-300 hover:-translate-y-2">
+          <!-- UPDATED to .webp -->
+          <img src="assets/shops_photo/havmore.webp" alt="Havmor Ice Cream" class="w-full h-48 sm:h-56 object-cover" onerror="this.src='https://placehold.co/400x220/f1f5f9/64748b?text=Havmor'">
+          <div class="p-4 sm:p-6">
+            <h3 class="text-xl sm:text-2xl font-bold mb-2 text-[#002F67]">Havmor Ice Cream</h3>
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-[#002F67]">Ground Floor <span>
+              <div class="flex items-center text-yellow-500"><i class="fas fa-star"></i><span class="ml-1 font-semibold">4.7</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex-shrink-0 w-[85vw] sm:w-80 md:w-96 snap-start border-4 border-[#002F67]/30 rounded-3xl overflow-hidden bg-white shadow-xl hover:shadow-2xl transition-transform duration-300 hover:-translate-y-2">
+          <!-- UPDATED to .webp -->
+          <img src="assets/shops_photo/waffleworld.webp" alt="Waffle world" class="w-full h-48 sm:h-56 object-cover" onerror="this.src='https://placehold.co/400x220/f1f5f9/64748b?text=Waffle+World'">
+          <div class="p-4 sm:p-6">
+            <h3 class="text-xl sm:text-2xl font-bold mb-2 text-[#002F67]">Waffle World</h3>
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-[#002F67]">Ground Floor</span>
+              <div class="flex items-center text-yellow-500"><i class="fas fa-star"></i><span class="ml-1 font-semibold">4.6</span></div>
+            </div>
+          </div>
+        </div>
+        
+          <div class="flex-shrink-0 w-[85vw] sm:w-80 md:w-96 snap-start border-4 border-[#002F67]/30 rounded-3xl overflow-hidden bg-white shadow-xl hover:shadow-2xl transition-transform duration-300 hover:-translate-y-2">
+          <!-- UPDATED to .webp -->
+          <img src="assets/shops_photo/beyondtemptation.webp" alt="Beyond Temptations" class="w-full h-48 sm:h-56 object-cover" onerror="this.src='https://placehold.co/400x220/f1f5f9/64748b?text=Beyond+Temptations'">
+          <div class="p-4 sm:p-6">
+            <h3 class="text-xl sm:text-2xl font-bold mb-2 text-[#002F67]">Beyond Temptations</h3>
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-[#002F67]">2nd Floor</span>
+              <div class="flex items-center text-yellow-500"><i class="fas fa-star"></i><span class="ml-1 font-semibold">4.6</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex-shrink-0 w-[85vw] sm:w-80 md:w-96 snap-start border-4 border-[#002F67]/30 rounded-3xl overflow-hidden bg-white shadow-xl hover:shadow-2xl transition-transform duration-300 hover:-translate-y-2">
+          <!-- UPDATED to .webp -->
+          <img src="assets/shops_photo/mcdonalds.webp" alt="McDonalds" class="w-full h-48 sm:h-56 object-cover" onerror="this.src='https://placehold.co/400x220/f1f5f9/64748b?text=McDonalds'">
+          <div class="p-4 sm:p-6">
+            <h3 class="text-xl sm:text-2xl font-bold mb-2 text-[#002F67]">Mcdonalds</h3>
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-[#002F67]">Ground Floor</span>
+              <div class="flex items-center text-yellow-500"><i class="fas fa-star"></i><span class="ml-1 font-semibold">4.6</span></div>
+            </div>
+          </div>
+        </div>
+      
+      </div>
+
+
+    </div>
+  </div>
+
+  <style>
+    .carousel-container::-webkit-scrollbar { display: none; }
+    /* Scroll padding to ensure snap points are centered */
+    .carousel-container { scroll-padding: 0 5%; }
+    @media (min-width: 640px) {
+        .carousel-container { scroll-padding: 0 2.5rem; }
+    }
+    .carousel-arrow { width: 44px; height: 44px; }
+    @media (min-width: 640px) {
+        .carousel-arrow { width: 56px; height: 56px; }
+    }
+  </style>
+
+  <script>
+    function scrollCarousel(id, direction) {
+      const carousel = document.getElementById(id + 'Carousel');
+      if (!carousel) return;
+
+      // compute width of one card (including gap)
+      const card = carousel.querySelector('.flex-shrink-0');
+      if (!card) return;
+
+      const gap = parseInt(getComputedStyle(carousel).gap) || 24;
+      // Use clientWidth for a more accurate scroll distance on mobile
+      const cardWidth = card.clientWidth + gap;
+
+      const start = carousel.scrollLeft;
+      const target = start + direction * cardWidth;
+
+      carousel.scrollTo({ left: target, behavior: 'smooth' });
+    }
+
+    // make keyboard arrow navigation work when carousel focused
+    const diningCarousel = document.getElementById('diningCarousel');
+    if (diningCarousel) {
+        diningCarousel.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                scrollCarousel('dining', 1);
+            }
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                scrollCarousel('dining', -1);
+            }
+        });
+    }
+  </script>
+</section>
+
+
+
+    <!-- Entertainment -->
+    <section id="entertainment" class="py-16 sm:py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 sm:mb-16">
+                <h2 class="text-3xl sm:text-5xl font-black mb-4">Entertainment & Fun Zone</h2>
+                <p class="text-base sm:text-xl text-gray-600">Experience City Pride at Nyati Plaza</p>
+            </div>
+            
+            <!-- Responsive height -->
+            <div class="relative rounded-3xl overflow-hidden group cursor-pointer h-[400px] md:h-[500px]">
+                <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200&h=700&fit=crop" alt="City Pride Theatre" class="w-full h-full object-cover group-hover:scale-110 smooth-transition">
+                <!-- Responsive padding -->
+                <div class="absolute inset-0 bg-gradient-to-t from-blue-900/90 to-transparent flex items-end p-6 md:p-12">
+                    <div>
+                        <span class="inline-block px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded-full mb-4">Nyati Plaza</span>
+                        <!-- Responsive typography -->
+                        <h3 class="text-3xl sm:text-5xl font-black text-white mb-4">City Pride Theatre</h3>
+                        <p class="text-white/90 mb-6 text-base sm:text-lg">Blockbusters, comfort & cinematic luxury — only at City Pride.</p>
+                    <a href="https://in.bookmyshow.com/cinemas/pune/city-pride-kharadi/buytickets/CYKR/20251031">   <button class="btn-gradient opacity-0 group-hover:opacity-100 smooth-transition">
+                            Book Tickets <i class="fas fa-arrow-right ml-2"></i>
+                        </button></a> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Jewellery & Luxury -->
+   <section id="luxury" class="py-16 sm:py-24 bg-white"> 
+<section class="relative py-16 sm:py-24 bg-gradient-to-r from-[#001F4D] via-[#002F67] to-[#004C91] luxury-section overflow-hidden">
+  <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/diamond-upholstery.png')] opacity-10"></div>
+  <div class="container mx-auto px-6 sm:px-8 relative z-10">
+
+    <!-- Heading -->
+    <div class="text-center mb-12 sm:mb-16">
+      <h2 class="text-3xl sm:text-5xl font-extrabold text-white mb-4 tracking-wide font-[PlayfairDisplay]">
+        Crafted Luxury
+      </h2>
+      <p class="text-base sm:text-xl text-white/80 font-[Poppins]">
+        Fine Jewellery & Timeless Elegance
+      </p>
+    </div>
+
+    <!-- Responsive grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-16 items-center">
+      <!-- Left Image -->
+      <div class="relative group order-2 lg:order-1">
+        <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&h=600&fit=crop" alt="Luxury Jewellery" class="rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.4)] transform transition-transform duration-700 group-hover:scale-105">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#001F4D]/70 to-transparent rounded-3xl"></div>
+      </div>
+
+      <!-- Right Content -->
+      <div class="text-white order-1 lg:order-2">
+        <h3 class="text-3xl sm:text-4xl font-extrabold mb-6 font-[PlayfairDisplay] text-[#E5B200]">
+          Discover Exquisite Collections
+        </h3>
+        <p class="text-base sm:text-lg text-white/85 leading-relaxed mb-10 font-[Poppins]">
+          Step into a world of elegance and sophistication. From timeless classics to contemporary masterpieces, our curated jewellery brands redefine luxury for every occasion.
+        </p>
+
+        <!-- Responsive grid for brand cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
+          <!-- Brand Card 1 -->
+          <div class="rounded-2xl bg-white/10 backdrop-blur-md p-4 sm:p-6 text-center border border-white/20 hover:border-[#E5B200] transition-all duration-300 hover:scale-105">
+            <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=200&h=100&fit=crop" alt="Candere by Kalyan Jewellers" class="w-full h-16 sm:h-20 object-contain mb-3 rounded-md">
+            <p class="font-semibold text-white/90 tracking-wide text-sm sm:text-base">Candere by Kalyan Jewellers</p>
+          </div>
+
+          <!-- Brand Card 2 -->
+          <div class="rounded-2xl bg-white/10 backdrop-blur-md p-4 sm:p-6 text-center border border-white/20 hover:border-[#E5B200] transition-all duration-300 hover:scale-105">
+            <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=200&h=100&fit=crop" alt="Bluestone" class="w-full h-16 sm:h-20 object-contain mb-3 rounded-md">
+            <p class="font-semibold text-white/90 tracking-wide text-sm sm:text-base">Bluestone</p>
+          </div>
+
+          <!-- Brand Card 3 -->
+          <div class="rounded-2xl bg-white/10 backdrop-blur-md p-4 sm:p-6 text-center border border-white/20 hover:border-[#E5B200] transition-all duration-300 hover:scale-105">
+            <img src="https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=200&h=100&fit=crop" alt="Litstyle by PNG Jewellers" class="w-full h-16 sm:h-20 object-contain mb-3 rounded-md">
+            <p class="font-semibold text-white/90 tracking-wide text-sm sm:text-base">Litstyle by PNG Jewellers</p>
+          </div>
+         
+          <div class="rounded-2xl bg-white/10 backdrop-blur-md p-4 sm:p-6 text-center border border-white/20 hover:border-[#E5B200] transition-all duration-300 hover:scale-105">
+            <img src="https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=200&h=100&fit=crop" alt="Silver and Pearl" class="w-full h-16 sm:h-20 object-contain mb-3 rounded-md">
+            <p class="font-semibold text-white/90 tracking-wide text-sm sm:text-base">Silver and Pearl</p>
+          </div>
+
+           <div class="rounded-2xl bg-white/10 backdrop-blur-md p-4 sm:p-6 text-center border border-white/20 hover:border-[#E5B200] transition-all duration-300 hover:scale-105">
+            <img src="https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=200&h=100&fit=crop" alt="Swapnagandha" class="w-full h-16 sm:h-20 object-contain mb-3 rounded-md">
+            <p class="font-semibold text-white/90 tracking-wide text-sm sm:text-base">Swapnagandha Artificial Jewellery</p>
+          </div>
+          
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</section>
+    <!-- Visual Tour -->
+   
+<section id="gallery" class="py-16 sm:py-24 bg-gradient-to-b from-white to-blue-50 relative overflow-hidden">
+  <div class="container mx-auto px-6 sm:px-8">
+    <div class="text-center mb-12 sm:mb-16">
+      <h2 class="text-3xl sm:text-5xl font-extrabold mb-4 text-[#002F67] font-[PlayfairDisplay]">Visual Tour</h2>
+      <p class="text-base sm:text-xl text-gray-600 font-[Poppins]">Experience Nyati Plaza through our lens</p>
+    </div>
+
+    <!-- Responsive grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12 sm:mb-16 items-center">
+      <!-- Video Section -->
+      <div class="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-[#002F67]/30 group order-1">
+        <iframe
+          class="w-full h-[300px] sm:h-[400px] lg:h-[460px] transition-transform duration-500 group-hover:scale-105"
+          src="https://www.youtube.com/embed/fG0H-yVkQYA?autoplay=1&mute=1&start=0&controls=1&loop=1&playlist=fG0H-yVkQYA"
+          title="Nyati Plaza Visual Tour"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+        ></iframe>
+        <div class="absolute inset-0 bg-gradient-to-t from-[#002F67]/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+      </div>
+
+      <!-- Gallery Grid -->
+      <div class="grid grid-cols-2 gap-4 sm:gap-6 order-2">
+        <div class="gallery-item rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl border-4 border-[#002F67]/20 transition-transform duration-300 hover:-translate-y-2 h-[150px] sm:h-[220px]">
+          <!-- UPDATED to .webp -->
+          <img src="assets/plazainternal/DSC04978.webp" alt="Gallery" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/300x300/f1f5f9/64748b?text=Gallery+1'">
+        </div>
+        <div class="gallery-item rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl border-4 border-[#002F67]/20 transition-transform duration-300 hover:-translate-y-2 h-[150px] sm:h-[220px]">
+          <!-- UPDATED to .webp -->
+          <img src="assets/plazainternal/DSC04962.webp" alt="Gallery" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/300x300/f1f5f9/64748b?text=Gallery+2'">
+        </div>
+        <div class="gallery-item rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl border-4 border-[#002F67]/20 transition-transform duration-300 hover:-translate-y-2 h-[150px] sm:h-[220px]">
+          <!-- UPDATED to .webp -->
+          <img src="assets/plazainternal/DJI_20250318192639_0042_D_01.webp" alt="Gallery" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/300x300/f1f5f9/64748b?text=Gallery+3'">
+        </div>
+        <div class="gallery-item rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl border-4 border-[#002F67]/20 transition-transform duration-300 hover:-translate-y-2 h-[150px] sm:h-[220px]">
+          <!-- UPDATED to .webp -->
+          <img src="assets/plazainternal/DSC04998.webp" alt="Gallery" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/300x300/f1f5f9/64748b?text=Gallery+4'">
+        </div>
+      </div>
+    </div>
+
+    <!-- Button -->
+   <div class="text-center">
+<button type="button" class="btn-gradient text-base sm:text-lg px-8 sm:px-10 py-3 sm:py-4 rounded-full shadow-xl hover:shadow-2xl transition-transform duration-300 hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-blue-500">
+<i class="fas fa-images mr-2"></i> 
+<a href="gallery.html" class="inline-block"> View Full Gallery </a>
+</button>
+
+</div>
+
+  <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/diagonal-stripes.png')] -z-10"></div>
+</section>
+    <!-- Stats -->
+   <section class="py-16 sm:py-24 gradient-bg relative overflow-hidden">
+  <div class="container mx-auto px-6 text-center">
+    <div class="mb-12 sm:mb-16">
+      <h2 class="text-3xl sm:text-5xl font-extrabold text-white mb-4 tracking-wide font-[PlayfairDisplay]">
+        Trusted by <span class="text-[#E5B200]">250+ Global Brands</span>
+      </h2>
+      <p class="text-base sm:text-xl text-white/90 font-[Poppins]">
+        Join India's premier luxury shopping destination
+      </p>
+    </div>
+
+    <!-- Responsive grid -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10">
+      <div class="text-center text-white">
+        <div class="counter text-5xl sm:text-6xl font-extrabold font-[PlayfairDisplay]" data-target="250">0</div>
+        <div class="flex items-center justify-center my-3 sm:my-4">
+          <div class="h-1 w-12 sm:w-16 bg-white/50 rounded-full"></div>
+        </div>
+        <p class="text-lg sm:text-2xl font-medium font-[Poppins]">Stores</p>
+      </div>
+
+      <div class="text-center text-white relative">
+        <div class="flex justify-center items-baseline">
+          <div class="counter text-5xl sm:text-6xl font-extrabold font-[PlayfairDisplay]" data-target="50000">0</div>
+          <span class="text-3xl sm:text-4xl font-extrabold ml-1 sm:ml-2 align-baseline font-[PlayfairDisplay]">+</span>
+        </div>
+        <div class="flex items-center justify-center my-3 sm:my-4">
+          <div class="h-1 w-12 sm:w-16 bg-white/50 rounded-full"></div>
+        </div>
+        <p class="text-lg sm:text-2xl font-medium font-[Poppins]">Monthly Visitors</p>
+      </div>
+
+      <div class="text-center text-white">
+        <div class="counter text-5xl sm:text-6xl font-extrabold font-[PlayfairDisplay]" data-target="100">0</div>
+        <div class="flex items-center justify-center my-3 sm:my-4">
+          <div class="h-1 w-12 sm:w-16 bg-white/50 rounded-full"></div>
+        </div>
+        <p class="text-lg sm:text-2xl font-medium font-[Poppins]">Dining Outlets</p>
+      </div>
+
+      <div class="text-center text-white">
+        <div class="counter text-5xl sm:text-6xl font-extrabold font-[PlayfairDisplay]" data-target="200">0</div>
+        <div class="flex items-center justify-center my-3 sm:my-4">
+          <div class="h-1 w-12 sm:w-16 bg-white/50 rounded-full"></div>
+        </div>
+        <p class="text-lg sm:text-2xl font-medium font-[Poppins]">Annual Events</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/diamond-upholstery.png')] -z-10"></div>
+</section>
+
+<style>
+  .counter {
+    /* Responsive font size handled in main style block */
+    text-shadow: 0 0 20px rgba(229, 178, 0, 0.3);
+  }
+</style>
+
+
+    <!-- Services -->
+    
+<section class="py-16 sm:py-20 bg-gradient-to-b from-white to-gray-50">
+  <div class="container mx-auto px-6">
+    <div class="text-center mb-12 sm:mb-16">
+      <h2 class="text-3xl sm:text-5xl font-black text-[#002F67] mb-4 font-[PlayfairDisplay]">Mall Services</h2>
+      <p class="text-base sm:text-xl text-gray-600 font-[Poppins]">Exclusive amenities designed for your convenience</p>
+    </div>
+
+    <!-- Responsive grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+      <!-- Concierge -->
+      <div class="service-card bg-white p-6 sm:p-10 rounded-3xl border-2 border-[#002F67]/10 shadow-md hover:shadow-xl hover:border-[#002F67]/30 transition-all duration-300 text-center">
+        <i class="fas fa-concierge-bell text-3xl sm:text-4xl text-[#002F67] mb-4"></i>
+        <h4 class="text-xl sm:text-2xl font-bold mb-2 text-gray-800">Concierge</h4>
+        <p class="text-gray-600 text-sm sm:text-base">Personalized shopping & guest assistance</p>
+      </div>
+
+      <!-- Parking -->
+      <div class="service-card bg-white p-6 sm:p-10 rounded-3xl border-2 border-[#002F67]/10 shadow-md hover:shadow-xl hover:border-[#002F67]/30 transition-all duration-300 text-center">
+        <i class="fas fa-parking text-3xl sm:text-4xl text-[#002F67] mb-4"></i>
+        <h4 class="text-xl sm:text-2xl font-bold mb-2 text-gray-800">Parking</h4>
+        <p class="text-gray-600 text-sm sm:text-base">2000+ secure and covered parking spaces</p>
+      </div>
+
+      <!-- Ambience -->
+      <div class="service-card bg-white p-6 sm:p-10 rounded-3xl border-2 border-[#002F67]/10 shadow-md hover:shadow-xl hover:border-[#002F67]/30 transition-all duration-300 text-center">
+        <i class="fas fa-spa text-3xl sm:text-4xl text-[#002F67] mb-4"></i>
+        <h4 class="text-xl sm:text-2xl font-bold mb-2 text-gray-800">Ambience</h4>
+        <p class="text-gray-600 text-sm sm:text-base">Elegant interiors with a luxury experience</p>
+      </div>
+
+      <!-- Shop & Drop -->
+      <div class="service-card bg-white p-6 sm:p-10 rounded-3xl border-2 border-[#002F67]/10 shadow-md hover:shadow-xl hover:border-[#002F67]/30 transition-all duration-300 text-center">
+        <i class="fas fa-shopping-cart text-3xl sm:text-4xl text-[#002F67] mb-4"></i>
+        <h4 class="text-xl sm:text-2xl font-bold mb-2 text-gray-800">Shop & Drop</h4>
+        <p class="text-gray-600 text-sm sm:text-base">Enjoy hands-free shopping with bag storage</p>
+      </div>
+
+      <!-- Gift Cards -->
+      <div class="service-card bg-white p-6 sm:p-10 rounded-3xl border-2 border-[#002F67]/10 shadow-md hover:shadow-xl hover:border-[#002F67]/30 transition-all duration-300 text-center">
+        <i class="fas fa-gift text-3xl sm:text-4xl text-[#002F67] mb-4"></i>
+        <h4 class="text-xl sm:text-2xl font-bold mb-2 text-gray-800">Gift Cards</h4>
+        <p class="text-gray-600 text-sm sm:text-base">The perfect choice for every celebration</p>
+      </div>
+
+      <!-- Pre-Order Food -->
+      <div class="service-card bg-white p-6 sm:p-10 rounded-3xl border-2 border-[#002F67]/10 shadow-md hover:shadow-xl hover:border-[#002F67]/30 transition-all duration-300 text-center">
+        <i class="fas fa-utensils text-3xl sm:text-4xl text-[#002F67] mb-4"></i>
+        <h4 class="text-xl sm:text-2xl font-bold mb-2 text-gray-800">Pre-Order Food</h4>
+        <p class="text-gray-600 text-sm sm:text-base">Skip the wait — order your meal in advance</p>
+      </div>
+    </div>
+  </div>
+</section>
+    <!-- Leasing CTA -->
+    <section class="py-16 sm:py-20 gradient-bg">
+        <div class="container mx-auto px-6">
+            <!-- Responsive grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="text-white order-2 lg:order-1">
+                    <h2 class="text-3xl sm:text-5xl font-black mb-6">Open at Nyati Plaza</h2>
+                    <p class="text-xl sm:text-2xl mb-8">Lease a Premium Space</p>
+                    
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-check-circle text-xl sm:text-2xl"></i>
+                            <p class="text-base sm:text-lg">100k+ monthly footfall guarantee</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-check-circle text-xl sm:text-2xl"></i>
+                            <p class="text-base sm:text-lg">Premium location in Pune's prime area</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-check-circle text-xl sm:text-2xl"></i>
+                            <p class="text-base sm:text-lg">Flexible space configurations available</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-check-circle text-xl sm:text-2xl"></i>
+                            <p class="text-base sm:text-lg">Full marketing & promotional support</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Responsive button layout -->
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button class="bg-white text-[--primary] px-8 py-3 sm:py-4 rounded-full font-bold hover:bg-gray-100 smooth-transition w-full sm:w-auto">
+                            <i class="fas fa-calendar-alt mr-2"></i>Book Site Visit
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-2xl order-1 lg:order-2">
+                    <h3 class="text-2xl sm:text-3xl font-black mb-6">Get in Touch</h3>
+                    <form class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Your Name</label>
+                            <input type="text" placeholder="John Doe" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[--primary] focus:outline-none smooth-transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Email Address</label>
+                            <input type="email" placeholder="your@email.com" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[--primary] focus:outline-none smooth-transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Message</label>
+                            <textarea placeholder="Your message..." class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[--primary] focus:outline-none smooth-transition" rows="4"></textarea>
+                        </div>
+                        <button type="submit" class="w-full btn-gradient py-3 sm:py-4">
+                            Submit <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Plan Your Visit -->
+    <section id="visit" class="py-16 sm:py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 sm:mb-16">
+                <h2 class="text-3xl sm:text-5xl font-black mb-4">Plan Your Visit</h2>
+                <p class="text-base sm:text-xl text-gray-600">Everything you need for a perfect day</p>
+            </div>
+            
+            <!-- Responsive grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
+                <div class="rounded-3xl overflow-hidden shadow-xl order-1">
+                   <!-- Responsive map -->
+                   <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15129.906628550489!2d73.91788350090106!3d18.552537270752943!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c3cd0134647d%3A0xbff4f7d437e3d3d0!2sNYATI%20PLAZA!5e0!3m2!1sen!2sin!4v1761592427739!5m2!1sen!2sin" class="w-full h-[400px] sm:h-[450px]" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+                
+                <!-- Responsive grid for flip cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 order-2">
+                    <!-- Responsive height for flip cards -->
+                    <div class="flip-card h-[150px] sm:h-[200px]">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <i class="fas fa-parking text-3xl sm:text-4xl" style="color: var(--primary); margin-bottom: 1rem;"></i>
+                                <h4 class="text-lg sm:text-xl font-bold">Parking</h4>
+                            </div>
+                            <div class="flip-card-back">
+                                <div>
+                                    <h4 class="text-lg sm:text-xl font-bold mb-3">Parking Info</h4>
+                                    <p class="text-xs sm:text-sm">2000+ spaces available across 3 basement levels and multi-level parking</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flip-card h-[150px] sm:h-[200px]">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <i class="far fa-clock text-3xl sm:text-4xl" style="color: var(--primary); margin-bottom: 1rem;"></i>
+                                <h4 class="text-lg sm:text-xl font-bold">Hours</h4>
+                            </div>
+                            <div class="flip-card-back">
+                                <div>
+                                    <h4 class="text-lg sm:text-xl font-bold mb-3">Mall Hours</h4>
+                                    <p class="text-xs sm:text-sm">Mon-Thu: 10 AM - 10 PM<br>Fri-Sun: 10 AM - 11 PM</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flip-card h-[150px] sm:h-[200px]">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <i class="fas fa-subway text-3xl sm:text-4xl" style="color: var(--primary); margin-bottom: 1rem;"></i>
+                                <h4 class="text-lg sm:text-xl font-bold">Transport</h4>
+                            </div>
+                            <div class="flip-card-back">
+                               
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flip-card h-[150px] sm:h-[200px]">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <i class="fas fa-wheelchair text-3xl sm:text-4xl" style="color: var(--primary); margin-bottom: 1rem;"></i>
+                                <h4 class="text-lg sm:text-xl font-bold">Accessibility</h4>
+                            </div>
+                            <div class="flip-card-back">
+                                <div>
+                                    <h4 class="text-lg sm:text-xl font-bold mb-3">Accessibility</h4>
+                                    <p class="text-xs sm:text-sm">Fully wheelchair accessible with elevators, ramps & special parking</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+<footer class="bg-gradient-to-b from-[#001F4D] to-[#002F67] text-white pt-16 pb-10 relative overflow-hidden">
+  <div class="container mx-auto px-6 relative z-10">
+    <!-- Top Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+      <!-- Brand / About -->
+      <div>
+        <div class="flex items-center space-x-3 mb-5">
+          <!-- UPDATED to .webp -->
+          <img src="assets/logos/65.webp" alt="Nyati Plaza Logo" class="h-14 object-contain" onerror="this.src='https://placehold.co/160x80/f1f5f9/002F67?text=Nyati+Plaza'">
+          <h3 class="text-2xl font-bold tracking-wide">Nyati Plaza</h3>
+        </div>
+        <p class="text-gray-300 leading-relaxed text-sm md:text-base">
+          Experience luxury shopping, fine dining, and entertainment at Pune’s most vibrant destination where lifestyle meets elegance.
+        </p>
+      </div>
+
+      <!-- Explore -->
+      <div>
+        <h4 class="text-lg font-bold mb-5 text-[#E5B200] uppercase">Explore</h4>
+        <ul class="space-y-2 text-gray-300">
+          <li><a href="brands.html" class="hover:text-[#E5B200] transition">Brands Directory</a></li>
+          <li><a href="dine.html" class="hover:text-[#E5B200] transition">Dining Options</a></li>
+          <li><a href="entertainment.html" class="hover:text-[#E5B200] transition">Entertainment</a></li>
+          <li><a href="visitnyati.html" class="hover:text-[#E5B200] transition">Visit Info</a></li>
+        </ul>
+      </div>
+
+      <!-- Visit -->
+      <div>
+        <h4 class="text-lg font-bold mb-5 text-[#E5B200] uppercase">Visit</h4>
+        <ul class="space-y-2 text-gray-300">
+          <li><a href="visitnyati.html" class="hover:text-[#E5B200] transition">Mall Hours</a></li>
+          <li><a href="visitnyati.html" class="hover:text-[#E5B200] transition">Parking Info</a></li>
+          <li><a href="visitnyati.html" class="hover:text-[#E5B200] transition">Mall Map</a></li>
+          <li><a href="visitnyati.html" class="hover:text-[#E5B200] transition">FAQs</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact + Social -->
+      <div>
+        <h4 class="text-lg font-bold mb-5 text-[#E5B200] uppercase">Contact</h4>
+        <ul class="space-y-3 text-gray-300 mb-6">
+          <li class="flex items-center"><i class="fas fa-phone text-[#E5B200] mr-3"></i> +91 9164089089</li>
+          <li class="flex items-center"><i class="fas fa-map-marker-alt text-[#E5B200] mr-3"></i> Pune, India</li>
+          <li class="flex items-center"><i class="fas fa-envelope text-[#E5B200] mr-3"></i> info@nyatiplaza.com</li>
+        </ul>
+
+        <!-- Social Links Right Side -->
+        <div class="flex flex-wrap gap-4 justify-start lg:justify-start">
+          <a href="https://www.facebook.com/Nyatiplaza/" class="w-10 h-10 rounded-full bg-[#E5B200]/20 border border-[#E5B200] flex items-center justify-center hover:bg-[#E5B200] hover:text-[#001F4D] transition">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="https://www.instagram.com/nyatiplazamall" class="w-10 h-10 rounded-full bg-[#E5B200]/20 border border-[#E5B200] flex items-center justify-center hover:bg-[#E5B200] hover:text-[#001F4D] transition">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="https://www.youtube.com/@Nyatiplazapune" class="w-10 h-10 rounded-full bg-[#E5B200]/20 border border-[#E5B200] flex items-center justify-center hover:bg-[#E5B200] hover:text-[#001F4D] transition">
+            <i class="fab fa-youtube"></i>
+          </a>
+          <a href="https://www.linkedin.com/company/nyatiplaza" class="w-10 h-10 rounded-full bg-[#E5B200]/20 border border-[#E5B200] flex items-center justify-center hover:bg-[#E5B200] hover:text-[#001F4D] transition">
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="border-t border-gray-600 my-8"></div>
+
+    <!-- Bottom Copyright -->
+    <div class="flex flex-col md:flex-row items-center justify-between text-gray-400 text-xs sm:text-sm">
+      <p class="text-center md:text-left mb-3 md:mb-0">
+        © 2025 Nyati Plaza. All Rights Reserved.
+      </p>
+      <div class="space-x-3">
+        <a href="#" class="hover:text-white transition">Privacy Policy</a>
+        <span>|</span>
+        <a href="#" class="hover:text-white transition">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decorative Blur Background -->
+  <div class="absolute top-0 right-0 w-64 h-64 bg-[#E5B200]/10 blur-3xl rounded-full -z-10"></div>
+  <div class="absolute bottom-0 left-0 w-64 h-64 bg-[#E5B200]/10 blur-3xl rounded-full -z-10"></div>
+</footer>
+    <script>
+        // Header scroll effect
+        const header = document.getElementById('mainHeader');
+        if (header) {
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+        }
+
+       
+        // Counter animation
+        function animateCounter(element) {
+            const target = parseInt(element.getAttribute('data-target'));
+            if (isNaN(target)) return; // Guard clause for invalid data
+            
+            const duration = 2000;
+            let current = 0;
+            const stepTime = 16; // approx 60fps
+            const totalSteps = duration / stepTime;
+            const increment = target / totalSteps;
+            
+            const updateCounter = () => {
+                current += increment;
+                if (current < target) {
+                    element.textContent = Math.floor(current);
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    element.textContent = target; // Ensure it ends on the exact target
+                }
+            };
+            
+            updateCounter();
+        }
+
+        // Intersection Observer for counters
+        const counters = document.querySelectorAll('.counter');
+        if ("IntersectionObserver" in window) {
+            const counterObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateCounter(entry.target);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            counters.forEach(counter => {
+                counterObserver.observe(counter);
+            });
+        } else {
+            // Fallback for older browsers
+            counters.forEach(counter => animateCounter(counter));
+        }
+
+        // --- New Mobile Menu JavaScript ---
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuIcon = document.getElementById('menuIcon');
+
+        if (mobileMenuBtn && mobileMenu && menuIcon) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                // Change icon
+                if (mobileMenu.classList.contains('hidden')) {
+                    menuIcon.classList.remove('fa-times');
+                    menuIcon.classList.add('fa-bars');
+                } else {
+                    menuIcon.classList.remove('fa-bars');
+                    menuIcon.classList.add('fa-times');
+                }
+            });
+
+            // Close mobile menu when a link is clicked
+            document.querySelectorAll('#mobileMenu a, #mobileMenu button').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    menuIcon.classList.remove('fa-times');
+                    menuIcon.classList.add('fa-bars');
+                });
+            });
+        }
+
+        // --- Body Padding for Sticky Header ---
+        document.addEventListener('DOMContentLoaded', function() {
+            const headerEl = document.getElementById('mainHeader');
+            if (headerEl) {
+                const setBodyPadding = () => {
+                    const headerHeight = headerEl.offsetHeight;
+                    document.body.style.paddingTop = headerHeight + 'px';
+                };
+                setBodyPadding();
+                window.addEventListener('resize', setBodyPadding);
+            }
+        });
+
+
+        // Smooth scroll for navigation (desktop and mobile)
+        // Updated to handle both mobile and footer links
+        document.querySelectorAll('a[href^="#"], a[href^="index.html#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                // Check if the link is to a different page
+                if (this.hostname !== window.location.hostname || this.pathname !== window.location.pathname) {
+                    // It's a link to another page (e.g., brands.html), let the browser handle it
+                    return;
+                }
+
+                e.preventDefault();
+                let href = this.getAttribute('href');
+                if (href.includes('#')) {
+                    href = '#' + href.split('#')[1]; // Get only the hash part
+                }
+                
+                // Special case for home link
+                if (href === "#home" || href === "index.html") {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                    // Close mobile menu if open
+                    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                        menuIcon.classList.remove('fa-times');
+                        menuIcon.classList.add('fa-bars');
+                    }
+                    return;
+                }
+
+                const target = document.querySelector(href);
+                if (target) {
+                    const headerOffset = document.getElementById('mainHeader').offsetHeight || 90; // Height of sticky header
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+
+                    // Close mobile menu if open
+                    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                        menuIcon.classList.remove('fa-times');
+                        menuIcon.classList.add('fa-bars');
+                    }
+                }
+            });
+        });
+        
+    </script>
+</body>
+</html>
+

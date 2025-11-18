@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dining - Nyati Plaza</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #002F67;
+            --accent: #E5B200;
+            --gradient: linear-gradient(135deg, #002F67 0%, #004a8f 50%, #0070b0 100%);
+            --text-dark: #0F1724;
+            --text-light: #ffffff;
+            --bg-light: #ffffff;
+            --bg-soft: #FAFBFD;
+            --shadow: 0 10px 30px rgba(0, 47, 103, 0.1);
+            --shadow-lg: 0 20px 40px rgba(0, 47, 103, 0.15);
+            --radius: 20px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            background: var(--bg-light);
+            color: var(--text-dark);
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        .glass-header {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 4px 20px rgba(0, 47, 103, 0.08);
+        }
+        
+        .sticky-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            /* Added padding for consistency */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        /* Added scrolled class for header shrink */
+        .sticky-header.scrolled {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+        
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after,
+        .nav-link.active::after { /* Active state */
+            width: 100%;
+        }
+
+        /* Responsive adjustments for mobile menu links */
+        .lg\:hidden .nav-link {
+            padding: 0.5rem 0;
+            width: fit-content;
+        }
+        
+        .btn-gradient {
+            background: var(--gradient);
+            color: white;
+            padding: 12px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap; /* Prevents button text wrapping */
+        }
+        
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .hero-section {
+            position: relative;
+            /* Responsive height */
+            height: 300px;
+            background: linear-gradient(rgba(0, 47, 103, 0.5), rgba(0, 47, 103, 0.5)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&h=700&fit=crop');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            /* margin-top: 80px; */ /* This is now handled by body padding */
+            padding: 1.5rem; /* Padding for mobile */
+        }
+        
+        .restaurant-card {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(135deg, rgba(229, 178, 0, 0.3), rgba(0, 47, 103, 0.1)) border-box;
+        }
+        
+        .restaurant-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .restaurant-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .restaurant-card-content {
+            padding: 20px;
+        }
+        
+        .category-badge {
+            display: inline-block;
+            background: var(--gradient);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .filter-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 4px; /* Responsive margin */
+        }
+        
+        .filter-btn.active {
+            background: var(--gradient);
+            color: white;
+            border-color: transparent;
+        }
+        
+        .filter-btn:hover:not(.active) {
+            transform: translateY(-2px);
+            background: #f0f6ff;
+        }
+        
+        /* .split-section is now handled by Tailwind classes */
+        
+        .split-section img {
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            width: 100%; /* Ensure image is responsive */
+            height: auto; /* Maintain aspect ratio */
+            object-fit: cover; /* Cover the area nicely */
+            max-height: 500px; /* Optional: constrain height */
+        }
+        
+        @media (min-width: 768px) {
+            .hero-section {
+                height: 500px;
+            }
+        }
+
+        /* Responsive typography fallbacks */
+        @media (max-width: 767px) {
+            .text-6xl {
+                font-size: 2.5rem; /* 4xl */
+                line-height: 1.1;
+            }
+            .text-5xl {
+                font-size: 2.25rem; /* 3xl */
+            }
+            .text-3xl {
+                font-size: 1.875rem; /* 2xl */
+            }
+            .text-2xl {
+                font-size: 1.125rem; /* xl */
+            }
+            .text-xl {
+                font-size: 1rem; /* base */
+            }
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-900">
+
+    <!-- Header - UNCHANGED AS REQUESTED (except .webp) -->
+    <header class="sticky-header glass-header bg-white/95 backdrop-blur-lg fixed top-0 left-0 w-full z-50 shadow-md border-b border-gray-200" id="mainHeader">
+      <div class="container mx-auto px-4 md:px-8"> <!-- Removed py-5 md:py-6, handled by style tag -->
+        <div class="flex items-center justify-between">
+          <!-- Logo -->
+          <div class="flex items-center space-x-3 flex-shrink-0">
+            <div class="w-36 md:w-40 flex items-center justify-center">
+              <!-- UPDATED to .webp -->
+              <img src="assets/logos/65.webp" alt="Nyati Plaza Logo" class="h-16 md:h-20 object-contain" onerror="this.src='https://placehold.co/160x80/f1f5f9/002F67?text=Nyati+Plaza'">
+            </div>
+          </div>
+    
+          <!-- Desktop Navigation -->
+          <nav class="hidden lg:flex items-center space-x-8 xl:space-x-12 font-medium">
+            <a href="index.html" class="nav-link text-[#002F67] hover:text-[#E5B200] transition">Home</a>
+            <a href="brands.html" class="nav-link text-[#002F67] hover:text-[#E5B200] transition">Brands</a>
+            <a href="dine.html" class="nav-link text-[#002F67] hover:text-[#E5B200] transition active">Dine</a> <!-- Set as active -->
+            <a href="entertainment.html" class="nav-link text-[#002F67] hover:text-[#E5B200] transition">Entertainment</a>
+            <a href="gallery.html" class="nav-link text-[#002F67] hover:text-[#E5B200] transition">Gallery</a>
+            <a href="visitnyati.html" class="nav-link text-[#002F67] hover:text-[#E5B200] transition">Visit Nyati</a>
+          </nav>
+    
+          <!-- Header Buttons & Mobile Toggle -->
+          <div class="flex items-center space-x-3 sm:space-x-5">
+            <button class="text-[#002F67] hover:text-[#E5B200] transition">
+              <i class="fas fa-search text-lg md:text-xl"></i>
+            </button>
+            <button class="hidden sm:block bg-[#002F67] text-white px-5 py-2 rounded-full font-semibold hover:bg-[#E5B200] hover:text-[#002F67] transition">Lease Space</button>
+            <!-- Mobile Menu Button -->
+            <button class="lg:hidden text-[#002F67] text-3xl" id="mobileMenuBtn" aria-label="Toggle menu">
+              <i class="fas fa-bars" id="menuIcon"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    
+      <!-- Mobile Menu -->
+      <div id="mobileMenu" class="lg:hidden hidden bg-white/95 text-[#002F67] transition-all duration-300 shadow-md">
+        <nav class="flex flex-col space-y-3 px-6 py-5 border-t border-gray-200 text-lg font-medium">
+          <a href="index.html" class="nav-link block hover:text-[#E5B200] transition">Home</a>
+          <a href="brands.html" class="nav-link block hover:text-[#E5B200] transition">Brands</a>
+          <a href="dine.html" class="nav-link block hover:text-[#E5B200] transition active">Dine</a>
+          <a href="entertainment.html" class="nav-link block hover:text-[#E5B200] transition">Entertainment</a>
+          <a href="gallery.html" class="nav-link block hover:text-[#E5B200] transition">Gallery</a>
+          <a href="visitnyati.html" class="nav-link block hover:text-[#E5B200] transition">Visit Nyati</a>
+          <button class="mt-4 bg-[#002F67] text-white px-5 py-2 rounded-full font-semibold hover:bg-[#E5B200] hover:text-[#002F67] transition">Lease Space</button>
+        </nav>
+      </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="text-center">
+            <!-- Responsive typography -->
+            <h1 class="text-4xl sm:text-6xl font-black mb-4">A Culinary Experience Beyond Taste</h1>
+            <p class="text-lg sm:text-2xl mb-8">From casual bites to fine dining — discover every flavour at Nyati Plaza</p>
+            <button class="btn-gradient" onclick="document.getElementById('restaurants').scrollIntoView({behavior: 'smooth'});">
+                <i class="fas fa-utensils mr-2"></i>Explore Restaurants
+            </button>
+        </div>
+    </section>
+
+   <!-- Floor Filter Section -->
+<section class="py-12 bg-gradient-to-b from-white to-gray-50">
+  <div class="container mx-auto px-6">
+    <div class="text-center mb-8">
+      <!-- Responsive typography -->
+      <h2 class="text-2xl sm:text-3xl font-black mb-4">Filter by Floor</h2>
+    </div>
+    <!-- Added flex-wrap for mobile -->
+    <div class="flex flex-wrap justify-center gap-3">
+      <button class="filter-btn active" onclick="filterRestaurants('all', this)">All</button>
+      <button class="filter-btn" onclick="filterRestaurants('ground', this)">🏢 Ground Floor</button>
+      <button class="filter-btn" onclick="filterRestaurants('first', this)">🏢 1st Floor</button>
+      <button class="filter-btn" onclick="filterRestaurants('second', this)">🏢 2nd Floor</button>
+    </div>
+  </div>
+</section>
+
+<!-- Restaurant Grid -->
+<section id="restaurants" class="py-16 sm:py-20 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="text-center mb-12 sm:mb-16">
+      <!-- Responsive typography -->
+      <h2 class="text-3xl sm:text-5xl font-black mb-4">Dining Outlets</h2>
+      <p class="text-base sm:text-xl text-gray-600">Explore Delicious Dining Options Across All Floors</p>
+    </div>
+
+    <!-- Responsive grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+      <!-- ================= GROUND FLOOR ================= -->
+      <div class="restaurant-card" data-category="ground">
+        <!-- UPDATED to .webp -->
+        <img src="assets/logos/14.webp" alt="Si Nonna's" onerror="this.src='https://placehold.co/400x200/f1f5f9/64748b?text=Si+Nonna%27s'">
+        <div class="restaurant-card-content">
+          <h3 class="text-2xl font-bold mb-2 text-[--primary]">Si Nonna’s</h3>
+          <p class="text-gray-600 mb-3">Ground Floor</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">Shop 25</span>
+            <a href="tel:7977778041" class="text-[--accent] font-semibold">7977778041</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="restaurant-card" data-category="ground">
+        <!-- UPDATED to .webp -->
+        <img src="assets/logos/27.webp" alt="Candy World" onerror="this.src='https://placehold.co/400x200/f1f5f9/64748b?text=Candy+World'">
+        <div class="restaurant-card-content">
+          <h3 class="text-2xl font-bold mb-2 text-[--primary]">Candy World</h3>
+          <p class="text-gray-600 mb-3">Ground Floor</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">Kiosk-1A</span>
+            <a href="tel:8530912151" class="text-[--accent] font-semibold">8530912151</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="restaurant-card" data-category="ground">
+        <!-- UPDATED to .webp -->
+        <img src="assets/logos/29.webp" alt="Nick Micks" onerror="this.src='https://placehold.co/400x200/f1f5f9/64748b?text=Nick+Micks'">
+        <div class="restaurant-card-content">
+          <h3 class="text-2xl font-bold mb-2 text-[--primary]">Nick Micks</h3>
+          <p class="text-gray-600 mb-3">Ground Floor</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">Kiosk-1C</span>
+            <a href="tel:9552933718" class="text-[--accent] font-semibold">9552933718</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="restaurant-card" data-category="ground">
+        <!-- UPDATED to .webp -->
+        <img src="assets/logos/43.webp" alt="Tea Post" onerror="this.src='https://placehold.co/400x200/f1f5f9/64748b?text=Tea+Post'">
+        <div class="restaurant-card-content">
+          <h3 class="text-2xl font-bold mb-2 text-[--primary]">Tea Post</h3>
+          <p class="text-gray-600 mb-3">Ground Floor</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">Kiosk-4B</span>
+            <a href="tel:9922690007" class="text-[--accent] font-semibold">9922690007</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="restaurant-card" data-category="ground">
+        <!-- UPDATED to .webp -->
+        <img src="assets/logos/45.webp" alt="Havmor Ice Cream" onerror="this.src='https://placehold.co/400x200/f1f5f9/64748b?text=Havmor'">
+        <div class="restaurant-card-content">
+          <h3 class="text-2xl font-bold mb-2 text-[--primary]">Havmor Ice Cream</h3>
+          <p class="text-gray-600 mb-3">Ground Floor</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">Kiosk-5A</span>
+            <a href="tel:9510611942" class="text-[--accent] font-semibold">9510611942</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="restaurant-card" data-category="ground">
+        <!-- UPDATED to .webp -->
+        <img src="assets/logos/25.webp" alt="Crispy Crunch" onerror="this.src='https://placehold.co/400x200/f1f5f9/64748b?text=Crispy+Crunch'">
+        <div class="restaurant-card-content">
+          <h3 class="text-2xl font-bold mb-2 text-[--primary]">Crispy Crunch</h3>
+          <p class="text-gray-600 mb-3">Ground Floor</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">Kiosk-5C</span>
+            <a href="tel:8796526244" class="text-[--accent] font-semibold">8796526244</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="restaurant-card" data-category="ground">
+        <img src="https://placehold.co/400x200/f1f5f9/64748b?text=Squashed" alt="Squashed" onerror="this.src='https://placehold.co/400x200/f1f5f9/64748b?text=Squashed'">
+        <div class="restaurant-card-content">
+          <h3 class="text-2xl font-bold mb-2 text-[--primary]">Squashed</h3>
+          <p class="text-gray-600 mb-3">Ground Floor</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">Kiosk-5D</span>
+            <a href="tel:8010259810" class="text-[--accent] font-semibold">8010259810</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="restaurant-card" data-category="ground">
+        <!-- UPDATED to .webp -->
+        <img src="assets/logos/34.webp" alt="Waffle World" onerror="this.src='https://placehold.co/400x200/f1f5f9/64748b?text=Waffle+World'">
+        <div class="restaurant-card-content">
+          <h3 class="text-2xl font-bold mb-2 text-[--primary]">Waffle World</h3>
+          <p class="text-gray-600 mb-3">Ground Floor</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">Kiosk-5E</span>
+            <a href="tel:7020519560" class="text-[--accent] font-semibold">7020519560</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="restaurant-card" data-category="ground">
+        <!-- UPDATED to .webp -->
+        <img src="assets/logos/20.webp" alt="Caffee#onthego" onerror="this.src='https://placehold.co/400x200/f1f5f9/64748b?text=Caffee%23onthego'">
+        <div class="restaurant-card-content">
+          <h3 class="text-2xl font-bold mb-2 text-[--primary]">Caffee#onthego</h3>
+          <p class="text-gray-600 mb-3">Ground Floor</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">Kiosk-5F</span>
+            <a href="tel:7774933914" class="text-[--accent] font-semibold">7774933914</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="restaurant-card" data-category="ground">
+        <!-- UPDATED to .webp -->
+        <img src="assets/logos/64.webp" alt="TAIKEN" onerror="this.src='https://placehold.co/400x200/f1f5f9/64748b?text=TAIKEN'">
+        <div class="restaurant-card-content">
+          <h3 class="text-2xl font-bold mb-2 text-[--primary]">TAIKEN</h3>
+          <p class="text-gray-600 mb-3">Ground Floor</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">Restaurant 04</span>
+            <span class="text-[--accent] font-semibold">NA</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="restaurant-card" data-category="ground">
+        <!-- UPDATED to .webp -->
+        <img src="assets/logos/44.webp" alt="Purnabrahma" onerror="this.src='https://placehold.co/400x200/f1f5f9/64748b?text=Purnabrahma'">
+        <div class="restaurant-card-content">
+          <h3 class="text-2xl font-bold mb-2 text-[--primary]">Purnabrahma</h3>
+          <p class="text-gray-600 mb-3">Ground Floor</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">Restaurant 05</span>
+            <a href="tel:9503040604" class="text-[--accent] font-semibold">9503040604</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="restaurant-card" data-category="ground">
+        <!-- UPDATED to .webp -->
+        <img src="assets/logos/62.webp" alt="McDonald's" onerror="this.src='https://placehold.co/400x200/f1f5f9/64748b?text=McDonald%27s'">
+        <div class="restaurant-card-content">
+          <h3 class="text-2xl font-bold mb-2 text-[--primary]">McDonald’s</h3>
+          <p class="text-gray-600 mb-3">Ground Floor</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">Restaurant 07</span>
+            <a href="tel:7304508769" class="text-[--accent] font-semibold">7304508769</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 1ST FLOOR ================= -->
+      <div class="restaurant-card" data-category="first">
+        <img src="https://placehold.co/400x200/f1f5f9/64748b?text=Sukhkarta+Thali" alt="Sukhkarta Thali">
+        <div class="restaurant-card-content">
+          <h3 class="text-2xl font-bold mb-2 text-[--primary]">Sukhkarta Thali</h3>
+          <p class="text-gray-600 mb-3">1st Floor</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">Shop 125</span>
+            <span class="text-[--accent] font-semibold">NA</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="restaurant-card" data-category="first">
+        <!-- UPDATED to .webp -->
+        <img src="assets/logos/8.webp" alt="Elix Lounge" onerror="this.src='https://placehold.co/400x200/f1f5f9/64748b?text=Elix+Lounge'">
+        <div class="restaurant-card-content">
+          <h3 class="text-2xl font-bold mb-2 text-[--primary]">Elix Lounge</h3>
+          <p class="text-gray-600 mb-3">1st Floor</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">Restaurant 103, 104</span>
+            <span class="text-[--accent] font-semibold">NA</span>
+          </div>
+        </div>
+      </div>
+
+  
+
+      <!-- ================= 2ND FLOOR ================= -->
+      <div class="restaurant-card" data-category="second">
+        <!-- UPDATED to .webp -->
+        <img src="assets/logos/13.webp" alt="Tealogy" onerror="this.src='https://placehold.co/400x200/f1f5f9/64748b?text=Tealogy'">
+        <div class="restaurant-card-content">
+          <h3 class="text-2xl font-bold mb-2 text-[--primary]">Tealogy</h3>
+          <p class="text-gray-600 mb-3">2nd Floor</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">Shop 206</span>
+            <span class="text-[--accent] font-semibold">NA</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="restaurant-card" data-category="second">
+        <!-- UPDATED to .webp -->
+        <img src="assets/logos/22.webp" alt="Fluffy Egg" onerror="this.src='https://placehold.co/400x200/f1f5f9/64748b?text=Fluffy+Egg'">
+        <div class="restaurant-card-content">
+          <h3 class="text-2xl font-bold mb-2 text-[--primary]">Fluffy Egg</h3>
+          <p class="text-gray-600 mb-3">2nd Floor</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">QSR 3</span>
+            <span class="text-[--accent] font-semibold">NA</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="restaurant-card" data-category="second">
+        <!-- UPDATED to .webp -->
+        <img src="assets/logos/18.webp" alt="Beyond Temptations" onerror="this.src='https://placehold.co/400x200/f1f5f9/64748b?text=Beyond+Temptations'">
+        <div class="restaurant-card-content">
+          <h3 class="text-2xl font-bold mb-2 text-[--primary]">Beyond Temptations</h3>
+          <p class="text-gray-600 mb-3">2nd Floor</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">QSR 4</span>
+            <span class="text-[--accent] font-semibold">NA</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="restaurant-card" data-category="second">
+        <img src="https://placehold.co/400x200/f1f5f9/64748b?text=Mona+Foods" alt="Mona Foods">
+        <div class="restaurant-card-content">
+          <h3 class="text-2xl font-bold mb-2 text-[--primary]">Mona Foods</h3>
+          <p class="text-gray-600 mb-3">2nd Floor</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">QSR 5</span>
+            <span class="text-[--accent] font-semibold">NA</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="restaurant-card" data-category="second">
+        <img src="https://placehold.co/400x200/f1f5f9/64748b?text=Gabru+Di+Chaap" alt="Gabru Di Chaap">
+        <div class="restaurant-card-content">
+          <h3 class="text-2xl font-bold mb-2 text-[--primary]">Gabru Di Chaap</h3>
+          <p class="text-gray-600 mb-3">2nd Floor</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">QSR 6</span>
+            <span class="text-[--accent] font-semibold">NA</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="restaurant-card" data-category="second">
+        <img src="https://placehold.co/400x200/f1f5f9/64748b?text=Momo+Magic+Cafe" alt="Momo Magic Café">
+        <div class="restaurant-card-content">
+          <h3 class="text-2xl font-bold mb-2 text-[--primary]">Momo Magic Café</h3>
+          <p class="text-gray-600 mb-3">2nd Floor</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">QSR 7</span>
+            <span class="text-[--accent] font-semibold">NA</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+    
+    <!-- Dining Redefined Section -->
+    <section class="py-16 sm:py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div class="container mx-auto px-6">
+            <!-- Responsive grid: stacks on mobile, 2-col on md+ -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
+                <!-- Image column (order-2 on mobile, order-1 on md) -->
+                <div class="order-2 md:order-1">
+                    <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&h=500&fit=crop" alt="Dining Experience" class="rounded-2xl shadow-xl w-full">
+                </div>
+                <!-- Content column (order-1 on mobile, order-2 on md) -->
+                <div class="order-1 md:order-2">
+                    <!-- Responsive typography -->
+                    <h2 class="text-3xl sm:text-5xl font-black mb-6 text-[--primary]">Dining Redefined</h2>
+                    <p class="text-base sm:text-xl text-gray-600 mb-6 leading-relaxed">From morning coffee to midnight cravings — we've got it all. Experience world-class dining in an ambience that matches the quality of our food.</p>
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-center space-x-4">
+                            <i class="fas fa-check-circle text-xl sm:text-2xl text-[--accent]"></i>
+                            <p class="text-base sm:text-lg">100+ Dining Outlets</p>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <i class="fas fa-check-circle text-xl sm:text-2xl text-[--accent]"></i>
+                            <p class="text-base sm:text-lg">Cuisines from Around the World</p>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <i class="fas fa-check-circle text-xl sm:text-2xl text-[--accent]"></i>
+                            <p class="text-base sm:text-lg">Premium Ambience & Service</p>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <i class="fas fa-check-circle text-xl sm:text-2xl text-[--accent]"></i>
+                            <p class="text-base sm:text-lg">Pre-Order & Reservation Available</p>
+                        </div>
+                    </div>
+                    <button class="btn-gradient">
+                        <i class="fas fa-calendar-alt mr-2"></i>Reserve a Table
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 sm:py-20 bg-gradient-to-r from-[#002F67] to-[#004C91]">
+        <div class="container mx-auto px-6 text-center text-white">
+            <!-- Responsive typography -->
+            <h2 class="text-3xl sm:text-5xl font-black mb-6">Ready to Dine?</h2>
+            <p class="text-lg sm:text-2xl mb-8">Visit Nyati Plaza and explore our culinary paradise</p>
+            <button class="btn-gradient">
+                <i class="fas fa-map-marker-alt mr-2"></i>Get Directions
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer - UNCHANGED AS REQUESTED (except .webp) -->
+   <footer class="bg-gradient-to-b from-[#001F4D] to-[#002F67] text-white pt-16 pb-10 relative overflow-hidden">
+  <div class="container mx-auto px-6 relative z-10">
+    <!-- Top Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+      <!-- Brand / About -->
+      <div>
+        <div class="flex items-center space-x-3 mb-5">
+          <!-- UPDATED to .webp -->
+          <img src="assets/logos/65.webp" alt="Nyati Plaza Logo" class="h-14 object-contain" onerror="this.src='https://placehold.co/160x80/f1f5f9/002F67?text=Nyati+Plaza'">
+          <h3 class="text-2xl font-bold tracking-wide">Nyati Plaza</h3>
+        </div>
+        <p class="text-gray-300 leading-relaxed text-sm md:text-base">
+          Experience luxury shopping, fine dining, and entertainment at Pune’s most vibrant destination where lifestyle meets elegance.
+        </p>
+      </div>
+
+      <!-- Explore -->
+      <div>
+        <h4 class="text-lg font-bold mb-5 text-[#E5B200] uppercase">Explore</h4>
+        <ul class="space-y-2 text-gray-300">
+          <li><a href="brands.html" class="hover:text-[#E5B200] transition">Brands Directory</a></li>
+          <li><a href="dine.html" class="hover:text-[#E5B200] transition">Dining Options</a></li>
+          <li><a href="entertainment.html" class="hover:text-[#E5B200] transition">Entertainment</a></li>
+          <li><a href="visitnyati.html" class="hover:text-[#E5B200] transition">Visit Info</a></li>
+        </ul>
+      </div>
+
+      <!-- Visit -->
+      <div>
+        <h4 class="text-lg font-bold mb-5 text-[#E5B200] uppercase">Visit</h4>
+        <ul class="space-y-2 text-gray-300">
+          <li><a href="visitnyati.html" class="hover:text-[#E5B200] transition">Mall Hours</a></li>
+          <li><a href="visitnyati.html" class="hover:text-[#E5B200] transition">Parking Info</a></li>
+          <li><a href="visitnyati.html" class="hover:text-[#E5B200] transition">Mall Map</a></li>
+          <li><a href="visitnyati.html" class="hover:text-[#E5B200] transition">FAQs</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact + Social -->
+      <div>
+        <h4 class="text-lg font-bold mb-5 text-[#E5B200] uppercase">Contact</h4>
+        <ul class="space-y-3 text-gray-300 mb-6">
+          <li class="flex items-center"><i class="fas fa-phone text-[#E5B200] mr-3"></i> +91 9164089089</li>
+          <li class="flex items-center"><i class="fas fa-map-marker-alt text-[#E5B200] mr-3"></i> Pune, India</li>
+          <li class="flex items-center"><i class="fas fa-envelope text-[#E5B200] mr-3"></i> info@nyatiplaza.com</li>
+        </ul>
+
+        <!-- Social Links Right Side -->
+        <div class="flex flex-wrap gap-4 justify-start lg:justify-start">
+          <a href="https://www.facebook.com/Nyatiplaza/" class="w-10 h-10 rounded-full bg-[#E5B200]/20 border border-[#E5B200] flex items-center justify-center hover:bg-[#E5B200] hover:text-[#001F4D] transition">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="https://www.instagram.com/nyatiplazamall" class="w-10 h-10 rounded-full bg-[#E5B200]/20 border border-[#E5B200] flex items-center justify-center hover:bg-[#E5B200] hover:text-[#001F4D] transition">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="https://www.youtube.com/@Nyatiplazapune" class="w-10 h-10 rounded-full bg-[#E5B200]/20 border border-[#E5B200] flex items-center justify-center hover:bg-[#E5B200] hover:text-[#001F4D] transition">
+            <i class="fab fa-youtube"></i>
+          </a>
+          <a href="https://www.linkedin.com/company/nyatiplaza" class="w-10 h-10 rounded-full bg-[#E5B200]/20 border border-[#E5B200] flex items-center justify-center hover:bg-[#E5B200] hover:text-[#001F4D] transition">
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="border-t border-gray-600 my-8"></div>
+
+    <!-- Bottom Copyright -->
+    <div class="flex flex-col md:flex-row items-center justify-between text-gray-400 text-xs sm:text-sm">
+      <p class="text-center md:text-left mb-3 md:mb-0">
+        © 2025 Nyati Plaza. All Rights Reserved.
+      </p>
+      <div class="space-x-3">
+        <a href="#" class="hover:text-white transition">Privacy Policy</a>
+        <span>|</span>
+        <a href="#" class="hover:text-white transition">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decorative Blur Background -->
+  <div class="absolute top-0 right-0 w-64 h-64 bg-[#E5B200]/10 blur-3xl rounded-full -z-10"></div>
+  <div class="absolute bottom-0 left-0 w-64 h-64 bg-[#E5B200]/10 blur-3xl rounded-full -z-10"></div>
+</footer>
+
+    <!-- Combined JavaScript -->
+    <script>
+        // --- Restaurant Filtering Logic ---
+        function filterRestaurants(category, button) {
+            const cards = document.querySelectorAll('.restaurant-card');
+            
+            cards.forEach(card => {
+                // Check if card has the data-category attribute
+                const cardCategory = card.getAttribute('data-category');
+                if (!cardCategory) {
+                    // If a card has no category, you might want to hide it or show it always
+                    // For this case, we'll hide it if a filter is active
+                    if (category === 'all') {
+                         card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                    return; // skip to next card
+                }
+
+                if (category === 'all' || cardCategory === category) {
+                    card.style.display = 'block';
+                    // Using a short delay for a subtle fade-in effect
+                    setTimeout(() => card.style.opacity = '1', 10);
+                } else {
+                    card.style.opacity = '0';
+                    // Hide after fade-out transition
+                    setTimeout(() => card.style.display = 'none', 300); // 300ms matches .transition-all
+                }
+            });
+            
+            // Update button active state
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            if(button) {
+                button.classList.add('active');
+            }
+        }
+
+        // --- Header Scroll Effect ---
+        const header = document.getElementById('mainHeader');
+        if (header) {
+            // This replaces the old logic with the class-based one from index.html
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+        }
+
+        // --- Mobile Menu & Body Padding Logic (from user file) ---
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuIcon = document.getElementById('menuIcon');
+
+            if (mobileMenuBtn && mobileMenu && menuIcon) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                menuIcon.classList.toggle('fa-bars');
+                menuIcon.classList.toggle('fa-times');
+            });
+            }
+
+            // Fix scrolling issue by ensuring no overflow restrictions remain
+            document.body.style.overflowY = 'auto';
+            document.documentElement.style.overflowY = 'auto';
+            document.body.style.height = 'auto';
+            document.documentElement.style.height = 'auto';
+
+            // Add spacing below navbar so content is visible and scrollable
+            const headerEl = document.getElementById('mainHeader');
+            if (headerEl) {
+                const setBodyPadding = () => {
+                    const headerHeight = headerEl.offsetHeight;
+                    document.body.style.paddingTop = headerHeight + 'px';
+                };
+                setBodyPadding();
+                window.addEventListener('resize', setBodyPadding);
+
+                // Also update hero margin-top just in case (optional, but safer)
+                const hero = document.querySelector('.hero-section');
+                if (hero) {
+                    hero.style.marginTop = '0px'; // Resetting margin as body padding handles it
+                }
+            }
+        });
+
+        // --- Smooth Scroll for Anchor Links ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const href = this.getAttribute('href');
+                const target = document.querySelector(href);
+                
+                if (target) {
+                    const headerOffset = document.getElementById('mainHeader').offsetHeight || 90;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+
+                    // Close mobile menu if open
+                    const mobileMenu = document.getElementById('mobileMenu');
+                    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                        document.getElementById('menuIcon').classList.remove('fa-times');
+                        document.getElementById('menuIcon').classList.add('fa-bars');
+                    }
+                } else if (href.includes('.html')) {
+                    // Fallback for external page links
+                    window.location.href = href;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+

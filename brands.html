@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brands - Nyati Plaza</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #002F67;
+            --accent: #E5B200;
+            --gradient: linear-gradient(135deg, #002F67 0%, #004a8f 50%, #0070b0 100%);
+            --text-dark: #0F1724;
+            --text-light: #ffffff;
+            --bg-light: #ffffff;
+            --bg-soft: #FAFBFD;
+            --shadow: 0 10px 30px rgba(0, 47, 103, 0.1);
+            --shadow-lg: 0 20px 40px rgba(0, 47, 103, 0.15);
+            --radius: 20px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            background: var(--bg-light);
+            color: var(--text-dark);
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        .glass-header {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 4px 20px rgba(0, 47, 103, 0.08);
+        }
+        
+        .sticky-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            /* Added py-4 for consistency with index.html */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        
+        /* Added scrolled class for header shrink */
+        .sticky-header.scrolled {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after,
+        .nav-link.active::after { /* Active state */
+            width: 100%;
+        }
+
+        /* Responsive adjustments for mobile menu links */
+        .lg\:hidden .nav-link {
+            padding: 0.5rem 0;
+            width: fit-content;
+        }
+        
+        .btn-gradient {
+            background: var(--gradient);
+            color: white;
+            padding: 12px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap; /* Prevents button text wrapping */
+        }
+        
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+      .hero-section {
+  position: relative;
+  height: 300px; /* Default for mobile */
+  background: linear-gradient(rgba(0, 47, 103, 0.5), rgba(0, 47, 103, 0.5)),
+              url('https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1200&h=700&fit=crop');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  margin-top: 80px; /* Offset for sticky header */
+  padding: 1.5rem; /* Padding for mobile */
+  overflow: hidden;
+}
+
+/* Medium devices and above */
+@media (min-width: 768px) {
+  .hero-section {
+    height: 500px;
+    padding: 2.5rem;
+  }
+}
+
+/* Large devices and above */
+@media (min-width: 1024px) {
+  .hero-section {
+    height: 600px;
+  }
+}
+
+        .brand-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(135deg, rgba(229, 178, 0, 0.3), rgba(0, 47, 103, 0.1)) border-box;
+        }
+        
+        .brand-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .tab-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 10px 16px; /* Responsive padding */
+            font-size: 0.875rem; /* Responsive font size */
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 4px; /* Added margin for wrapping */
+        }
+
+        @media (min-width: 640px) {
+            .tab-btn {
+                padding: 12px 24px;
+                font-size: 1rem;
+                margin: 8px;
+            }
+        }
+        
+        .tab-btn.active {
+            background: var(--gradient);
+            color: white;
+            border-color: transparent;
+        }
+        
+        .tab-btn:hover:not(.active) {
+            transform: translateY(-2px);
+            background: #f0f6ff;
+        }
+        
+        .carousel-container {
+            display: flex;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+            gap: 24px;
+        }
+        
+        .carousel-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .carousel-item {
+            flex-shrink:0;
+            width: 300px;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+        
+        .carousel-item:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .carousel-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .carousel-item-content {
+            padding: 16px;
+            background: white;
+        }
+        
+        /* Responsive typography fallbacks */
+        @media (max-width: 767px) {
+            .text-6xl {
+                font-size: 2.5rem; /* 4xl */
+                line-height: 1.1;
+            }
+            .text-5xl {
+                font-size: 2.25rem; /* 3xl */
+            }
+            .text-2xl {
+                font-size: 1.125rem; /* xl */
+            }
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-900">
+
+    <!-- Header (Copied from index.html for consistency) -->
+     <header class="sticky-header glass-header bg-white/95 backdrop-blur-lg fixed top-0 left-0 w-full z-50 shadow-md border-b border-gray-200" id="mainHeader">
+  <div class="container mx-auto px-4 md:px-8 py-5 md:py-6">
+    <div class="flex items-center justify-between">
+      <!-- Logo -->
+      <div class="flex items-center space-x-3 flex-shrink-0">
+        <div class="w-36 md:w-40 flex items-center justify-center">
+          <img src="assets/logos/65.webp" alt="Nyati Plaza Logo" class="h-16 md:h-20 object-contain" />
+        </div>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden lg:flex items-center space-x-8 xl:space-x-12 font-medium">
+        <a href="index.html" class="nav-link text-[#002F67] hover:text-[#E5B200] transition">Home</a>
+        <a href="brands.html" class="nav-link text-[#002F67] hover:text-[#E5B200] transition">Brands</a>
+        <a href="dine.html" class="nav-link text-[#002F67] hover:text-[#E5B200] transition">Dine</a>
+        <a href="entertainment.html" class="nav-link text-[#002F67] hover:text-[#E5B200] transition">Entertainment</a>
+        <a href="gallery.html" class="nav-link text-[#002F67] hover:text-[#E5B200] transition">Gallery</a>
+        <a href="visitnyati.html" class="nav-link text-[#002F67] hover:text-[#E5B200] transition">Visit Nyati</a>
+      </nav>
+
+      <!-- Header Buttons & Mobile Toggle -->
+      <div class="flex items-center space-x-3 sm:space-x-5">
+        <button class="text-[#002F67] hover:text-[#E5B200] transition">
+          <i class="fas fa-search text-lg md:text-xl"></i>
+        </button>
+        <button class="hidden sm:block bg-[#002F67] text-white px-5 py-2 rounded-full font-semibold hover:bg-[#E5B200] hover:text-[#002F67] transition">Lease Space</button>
+        <!-- Mobile Menu Button -->
+        <button class="lg:hidden text-[#002F67] text-3xl" id="mobileMenuBtn" aria-label="Toggle menu">
+          <i class="fas fa-bars" id="menuIcon"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="lg:hidden hidden bg-white/95 text-[#002F67] transition-all duration-300 shadow-md">
+    <nav class="flex flex-col space-y-3 px-6 py-5 border-t border-gray-200 text-lg font-medium">
+      <a href="index.html" class="block hover:text-[#E5B200] transition">Home</a>
+      <a href="brands.html" class="block hover:text-[#E5B200] transition">Brands</a>
+      <a href="dine.html" class="block hover:text-[#E5B200] transition">Dine</a>
+      <a href="entertainment.html" class="block hover:text-[#E5B200] transition">Entertainment</a>
+      <a href="gallery.html" class="block hover:text-[#E5B200] transition">Gallery</a>
+      <a href="visitnyati.html" class="block hover:text-[#E5B200] transition">Visit Nyati</a>
+      <button class="mt-4 bg-[#002F67] text-white px-5 py-2 rounded-full font-semibold hover:bg-[#E5B200] hover:text-[#002F67] transition">Lease Space</button>
+    </nav>
+  </div>
+</header>
+
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="text-center">
+            <!-- Responsive typography -->
+            <h1 class="text-4xl sm:text-6xl font-black mb-4">Discover Global Brands</h1>
+            <p class="text-lg sm:text-2xl mb-8">Explore 130+ premium retail outlets, from fashion to lifestyle</p>
+            <button class="btn-gradient" onclick="document.getElementById('directory').scrollIntoView({behavior: 'smooth'});">
+                <i class="fas fa-list mr-2"></i>View Floor Directory
+            </button>
+        </div>
+    </section>
+
+    <!-- Floor Directory -->
+<section id="directory" class="py-16 sm:py-24 bg-gradient-to-b from-white via-gray-50 to-[#f7f9fb]">
+  <div class="container object-cover mx-auto px-6 max-w-7xl">
+    <div class="text-center mb-12">
+      <!-- Responsive typography -->
+      <h2 class="text-3xl sm:text-5xl font-black mb-2 text-[#002F67] tracking-tight">Floor Directory</h2>
+      <p class="text-base sm:text-xl text-gray-600">Explore all brands by floor</p>
+    </div>
+
+    <!-- Responsive tab container -->
+    <div class="flex justify-center flex-wrap gap-2 sm:gap-6 mb-12">
+      <button class="tab-btn active" onclick="switchFloor('ground', this)">Ground Floor</button>
+      <button class="tab-btn" onclick="switchFloor('first', this)">1st Floor</button>
+      <button class="tab-btn" onclick="switchFloor('second', this)">2nd Floor</button>
+    </div>
+
+    <!-- Ground Floor -->
+    <!-- Grid is already responsive: grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 -->
+    <div id="ground" class="floor-content grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="https://placehold.co/128x80/f1f5f9/64748b?text=TREM" alt="TREM" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" />
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">TREM</h3>
+        <p class="text-gray-700 mb-1 capitalize">Experience center</p>
+        <p class="text-sm text-gray-500 mb-1">📞 9714077721</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 px-3 py-1 rounded-full">Shop No:- 1</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/37.png" alt="Jivika - Gemma Geminus" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/f1f5f9/64748b?text=Jivika'"/>
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">Jivika - Gemma Geminus</h3>
+        <p class="text-gray-700 mb-1 lowercase">jewellery</p>
+        <p class="text-sm text-gray-500 mb-1">📞 9028954014</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 px-3 py-1 rounded-full">Shop No:- 3</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/55.webp" alt="Titan" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/f1f5f9/64748b?text=Titan'"/>
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">Titan</h3>
+        <p class="text-gray-700 mb-1 lowercase">watches</p>
+        <p class="text-sm text-gray-500 mb-1">📞 8180055329</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 px-3 py-1 rounded-full">Shop No:- 5</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/38.webp" alt="Mudrika Womens Ethnic Wear" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/f1f5f9/64748b?text=Mudrika'"/>
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">Mudrika Womens Ethnic Wear</h3>
+        <p class="text-gray-700 mb-1 capitalize">Women's ethnic</p>
+        <p class="text-sm text-gray-500 mb-1">📞 8010714868</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 px-3 py-1 rounded-full">Shop No:- 7, 8</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/16.webp" alt="Food Junction & Barcode" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/f1f5f9/64748b?text=Food+Junction'"/>
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">Food Junction & Barcode</h3>
+        <p class="text-gray-700 mb-1 capitalize">Fashion apparel</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 px-3 py-1 rounded-full">Shop No:-</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/63.webp" alt="Reliance Fashion World" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/f1f5f9/64748b?text=Reliance'"/>
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">Reliance Fashion World</h3>
+        <p class="text-gray-700 mb-1 capitalize">Apparel</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 px-3 py-1 rounded-full">Shop No:-</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="https://placehold.co/128x80/f1f5f9/64748b?text=Candy+Floss" alt="Candy Floss" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" />
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">Candy Floss</h3>
+        <p class="text-gray-700 mb-1 lowercase">confectionary</p>
+        <p class="text-sm text-gray-500 mb-1">📞 8855003707</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 px-3 py-1 rounded-full">Shop No:- 19</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/6.webp" alt="Hy Fashion" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/f1f5f9/64748b?text=Hy+Fashion'"/>
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">Hy Fashion</h3>
+        <p class="text-gray-700 mb-1 capitalize">Women's ethnic</p>
+        <p class="text-sm text-gray-500 mb-1">📞 8799992174</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 px-3 py-1 rounded-full">Shop No:- 20</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/17.webp" alt="VR Mart" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/f1f5f9/64748b?text=VR+Mart'"/>
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">VR Mart</h3>
+        <p class="text-gray-700 mb-1 lowercase">mini grocery/ departmental store</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 px-3 py-1 rounded-full">Shop No:- 23</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/56.webp" alt="Baggit" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/f1f5f9/64748b?text=Baggit'"/>
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">Baggit</h3>
+        <p class="text-gray-700 mb-1 lowercase">accessories</p>
+        <p class="text-sm text-gray-500 mb-1">📞 7397805888</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 rounded-full px-3 py-1">Shop No:- 26</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="https://placehold.co/128x80/f1f5f9/64748b?text=Silver+and+Pearl" alt="Silver and Pearl" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" />
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">Silver and Pearl</h3>
+        <p class="text-gray-700 mb-1 lowercase">jewellery</p>
+        <p class="text-sm text-gray-500 mb-1">📞 7397805888</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 rounded-full px-3 py-1">Shop No:- 27</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/21.webp" alt="Aden Perfume" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/f1f5f9/64748b?text=Aden+Perfume'"/>
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">Aden Perfume</h3>
+        <p class="text-gray-700 mb-1 lowercase">perfume</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 rounded-full px-3 py-1">Shop No:- 28</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/49.webp" alt="Palmonas" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/f1f5f9/64748b?text=Palmonas'"/>
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">Palmonas</h3>
+        <p class="text-gray-700 mb-1 lowercase">jewellery</p>
+        <p class="text-sm text-gray-500 mb-1">📞 7558734508</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 rounded-full px-3 py-1">Shop No:- 29</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/47.webp" alt="Tuanz" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/f1f5f9/64748b?text=Tuanz'"/>
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">Tuanz</h3>
+        <p class="text-gray-700 mb-1 lowercase">jewellery</p>
+        <p class="text-sm text-gray-500 mb-1">📞 7620093221</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 rounded-full px-3 py-1">Shop No:- 30</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/19.webp" alt="Ajmal" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/f1f5f9/64748b?text=Ajmal'"/>
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">Ajmal</h3>
+        <p class="text-gray-700 mb-1 lowercase">perfume</p>
+        <p class="text-sm text-gray-500 mb-1">📞 8411891959</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 rounded-full px-3 py-1">Shop No:- 31</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/54.webp" alt="Mama Earth" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/f1f5f9/64748b?text=Mama+Earth'"/>
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">Mama Earth</h3>
+        <p class="text-gray-700 mb-1 lowercase">cosmetics</p>
+        <p class="text-sm text-gray-500 mb-1">📞 9022863768</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 rounded-full px-3 py-1">Shop No:- 32</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/58.webp" alt="Indian Terrain" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/f1f5f9/64748b?text=Indian+Terrain'"/>
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">Indian Terrain</h3>
+        <p class="text-gray-700 mb-1 capitalize">Apparel</p>
+        <p class="text-sm text-gray-500 mb-1">📞 9423646947</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 rounded-full px-3 py-1">Shop No:- 36</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="https://placehold.co/128x80/f1f5f9/64748b?text=Royal+Imitation" alt="Royal Imitation Jewellry" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" />
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">Royal Imitation Jewellry</h3>
+        <p class="text-gray-700 mb-1 lowercase">jewellery</p>
+        <p class="text-sm text-gray-500 mb-1">📞 8205786872</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 rounded-full px-3 py-1">Shop No:- 37A</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="https://placehold.co/128x80/f1f5f9/64748b?text=PNG+Jewellery" alt="PNG Jewellery" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" />
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">PNG Jewellery</h3>
+        <p class="text-gray-700 mb-1 lowercase">jewellery</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 rounded-full px-3 py-1">Shop No:- 39</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/50.webp" alt="LivSpace" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/f1f5f9/64748b?text=LivSpace'"/>
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">LivSpace</h3>
+        <p class="text-gray-700 mb-1 lowercase">Home furnishing</p>
+        <p class="text-sm text-gray-500 mb-1">📞 8047759151</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 rounded-full px-3 py-1">Shop No:- 41</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/51.webp" alt="Candere by Kalyan Jewellers" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/f1f5f9/64748b?text=Candere'"/>
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">Candere by Kalyan Jewellers</h3>
+        <p class="text-gray-700 mb-1 lowercase">jewellery</p>
+        <p class="text-sm text-gray-500 mb-1">📞 8983239243</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 rounded-full px-3 py-1">Shop No:- 2A</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/53.webp" alt="Blue Stone" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/f1f5f9/64748b?text=Blue+Stone'"/>
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">Blue Stone</h3>
+        <p class="text-gray-700 mb-1 lowercase">jewellery</p>
+        <p class="text-sm text-gray-500 mb-1">📞 8655371365</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 rounded-full px-3 py-1">Shop No:- 2B</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/35.webp" alt="Stylox Mens Apparels" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/f1f5f9/64748b?text=Stylox'"/>
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">Stylox Mens Apparels</h3>
+        <p class="text-gray-700 mb-1 capitalize">Apparel</p>
+        <p class="text-sm text-gray-500 mb-1">📞 9881196621</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 rounded-full px-3 py-1">Shop No:- 34A</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/27.webp" alt="Candy World" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/f1f5f9/64748b?text=Candy+World'"/>
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">Candy World</h3>
+        <p class="text-gray-700 mb-1 capitalize">Cosmetics</p>
+        <p class="text-sm text-gray-500 mb-1">📞 7900329560</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 rounded-full px-3 py-1">Shop No:- Kiosk-4A</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/3.webp" alt="Relax Zone" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/f1f5f9/64748b?text=Relax+Zone'"/>
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">Relax Zone</h3>
+        <p class="text-gray-700 mb-1 lowercase">Leisure</p>
+        <p class="text-sm text-gray-500 mb-1">📞 7020519560</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 rounded-full px-3 py-1">Shop No:- Kiosk-5B</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/32.webp" alt="Upgrade India Interior" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/f1f5f9/64748b?text=Upgrade+India'"/>
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">Upgrade India Interior</h3>
+        <p class="text-gray-700 mb-1 lowercase">Leisure</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 rounded-full px-3 py-1">Shop No:- Kiosk- 4C</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/42.webp" alt="Lenskart" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/f1f5f9/64748b?text=Lenskart'"/>
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">Lenskart</h3>
+        <p class="text-gray-700 mb-1 lowercase">Leisure</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 rounded-full px-3 py-1">Shop No:- 09</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-[#002F67] shadow-lg p-6 transition transform hover:scale-105 hover:border-blue-600 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/24.webp" alt="Aditya Chaat Bazaar" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/f1f5f9/64748b?text=Aditya+Chaat'"/>
+        <h3 class="font-bold text-xl text-[#002F67] mb-1">Aditya Chaat Bazaar</h3>
+        <p class="text-gray-700 mb-1 lowercase">Leisure</p>
+        <span class="text-sm font-semibold text-[#002F67] bg-gray-100 rounded-full px-3 py-1">Shop No:- na</span>
+      </div>
+    </div>
+
+    <!-- 1st Floor -->
+    <div id="first" class="floor-content hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
+      <div class="brand-card rounded-xl border-2 border-pink-600 shadow-lg p-6 transition hover:scale-105 hover:border-pink-700 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="https://placehold.co/128x80/fdf2f8/831843?text=TREM" alt="TREM" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" />
+        <h3 class="font-bold text-xl text-pink-700 mb-1">TREM</h3>
+        <p class="text-gray-700 mb-1 capitalize">Experience center</p>
+        <p class="text-sm text-gray-500 mb-1">📞 9714077721</p>
+        <span class="text-sm font-semibold text-pink-700 bg-gray-100 rounded-full px-3 py-1">Shop No:- 101 to 106</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-pink-600 shadow-lg p-6 transition hover:scale-105 hover:border-pink-700 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/33.webp" alt="JC Footwear" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/fdf2f8/831843?text=JC+Footwear'"/>
+        <h3 class="font-bold text-xl text-pink-700 mb-1">JC Footwear</h3>
+        <p class="text-gray-700 mb-1 lowercase">footwear</p>
+        <p class="text-sm text-gray-500 mb-1">📞 9657071708</p>
+        <span class="text-sm font-semibold text-pink-700 bg-gray-100 rounded-full px-3 py-1">Shop No:- 110</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-pink-600 shadow-lg p-6 transition hover:scale-105 hover:border-pink-700 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/60.webp" alt="W & Aurelia" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/fdf2f8/831843?text=W+%26+Aurelia'"/>
+        <h3 class="font-bold text-xl text-pink-700 mb-1">W & Aurelia</h3>
+        <p class="text-gray-700 mb-1 lowercase">women's ethnic</p>
+        <p class="text-sm text-gray-500 mb-1">📞 8806673666</p>
+        <span class="text-sm font-semibold text-pink-700 bg-gray-100 rounded-full px-3 py-1">Shop No:- 111</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-pink-600 shadow-lg p-6 transition hover:scale-105 hover:border-pink-700 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/10.webp" alt="Ajmera Fashion" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/fdf2f8/831843?text=Ajmera'"/>
+        <h3 class="font-bold text-xl text-pink-700 mb-1">Ajmera Fashion</h3>
+        <p class="text-gray-700 mb-1 lowercase">women's ethnic</p>
+        <p class="text-sm text-gray-500 mb-1">📞 8806673666</p>
+        <span class="text-sm font-semibold text-pink-700 bg-gray-100 rounded-full px-3 py-1">Shop No:- 113</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-pink-600 shadow-lg p-6 transition hover:scale-105 hover:border-pink-700 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/36.webp" alt="Cuddles Kids Wear" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/fdf2f8/831843?text=Cuddles'"/>
+        <h3 class="font-bold text-xl text-pink-700 mb-1">Cuddles Kids Wear</h3>
+        <p class="text-gray-700 mb-1 lowercase">kids wear</p>
+        <span class="text-sm font-semibold text-pink-700 bg-gray-100 rounded-full px-3 py-1">Shop No:- 120</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-pink-600 shadow-lg p-6 transition hover:scale-105 hover:border-pink-700 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/4.webp" alt="Miniso" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/fdf2f8/831843?text=Miniso'"/>
+        <h3 class="font-bold text-xl text-pink-700 mb-1">Miniso</h3>
+        <p class="text-gray-700 mb-1 lowercase">lifestyle product</p>
+        <p class="text-sm text-gray-500 mb-1">📞 9156324843</p>
+        <span class="text-sm font-semibold text-pink-700 bg-gray-100 rounded-full px-3 py-1">Shop No:- 122</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-pink-600 shadow-lg p-6 transition hover:scale-105 hover:border-pink-700 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/1.webp" alt="Artastic" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/fdf2f8/831843?text=Artastic'"/>
+        <h3 class="font-bold text-xl text-pink-700 mb-1">Artastic</h3>
+        <p class="text-gray-700 mb-1 lowercase">stationary</p>
+        <p class="text-sm text-gray-500 mb-1">📞 9657682215</p>
+        <span class="text-sm font-semibold text-pink-700 bg-gray-100 rounded-full px-3 py-1">Shop No:- 126</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-pink-600 shadow-lg p-6 transition hover:scale-105 hover:border-pink-700 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="https://placehold.co/128x80/fdf2f8/831843?text=Mobile+Cover" alt="Mobile Cover House" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" />
+        <h3 class="font-bold text-xl text-pink-700 mb-1">Mobile Cover House</h3>
+        <p class="text-gray-700 mb-1 lowercase">fashion</p>
+        <span class="text-sm font-semibold text-pink-700 bg-gray-100 rounded-full px-3 py-1">Shop No:- 129</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-pink-600 shadow-lg p-6 transition hover:scale-105 hover:border-pink-700 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/46.webp" alt="Glamorous - Womens Wear" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/fdf2f8/831843?text=Glamorous'"/>
+        <h3 class="font-bold text-xl text-pink-700 mb-1">Glamorous - Womens Wear</h3>
+        <p class="text-gray-700 mb-1 lowercase">women's ethnic</p>
+        <p class="text-sm text-gray-500 mb-1">📞 9665851237</p>
+        <span class="text-sm font-semibold text-pink-700 bg-gray-100 rounded-full px-3 py-1">Shop No:- 130</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-pink-600 shadow-lg p-6 transition hover:scale-105 hover:border-pink-700 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/40.webp" alt="Swapnagandha Artificial Jewellery and Jute Bags" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/fdf2f8/831843?text=Swapnagandha'"/>
+        <h3 class="font-bold text-xl text-pink-700 mb-1">Swapnagandha Artificial Jewellery and Jute Bags</h3>
+        <p class="text-gray-700 mb-1 lowercase">fashion accessories</p>
+        <p class="text-sm text-gray-500 mb-1">📞 9421740248</p>
+        <span class="text-sm font-semibold text-pink-700 bg-gray-100 rounded-full px-3 py-1">Shop No:- 132</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-pink-600 shadow-lg p-6 transition hover:scale-105 hover:border-pink-700 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/31.webp" alt="Aurgat" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/fdf2f8/831843?text=Aurgat'"/>
+        <h3 class="font-bold text-xl text-pink-700 mb-1">Aurgat</h3>
+        <p class="text-gray-700 mb-1 lowercase">jewellery</p>
+        <p class="text-sm text-gray-500 mb-1">📞 9175907825</p>
+        <span class="text-sm font-semibold text-pink-700 bg-gray-100 rounded-full px-3 py-1">Shop No:- 133</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-pink-600 shadow-lg p-6 transition hover:scale-105 hover:border-pink-700 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/11.webp" alt="Rich Infinity Salon" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/fdf2f8/831843?text=Rich+Infinity'"/>
+        <h3 class="font-bold text-xl text-pink-700 mb-1">Rich Infinity Salon</h3>
+        <p class="text-gray-700 mb-1 lowercase">salon</p>
+        <p class="text-sm text-gray-500 mb-1">📞 9988835909</p>
+        <span class="text-sm font-semibold text-pink-700 bg-gray-100 rounded-full px-3 py-1">Shop No:- 135, 136</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-pink-600 shadow-lg p-6 transition hover:scale-105 hover:border-pink-700 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/52.webp" alt="Lifesta" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/fdf2f8/831843?text=Lifesta'"/>
+        <h3 class="font-bold text-xl text-pink-700 mb-1">Lifesta</h3>
+        <p class="text-gray-700 mb-1 capitalize">Retail</p>
+        <span class="text-sm font-semibold text-pink-700 bg-gray-100 rounded-full px-3 py-1">Shop No:- 118</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-pink-600 shadow-lg p-6 transition hover:scale-105 hover:border-pink-700 hover:shadow-2xl flex flex-col items-center text-center">
+        <img src="assets/logos/41.webp" alt="Vision World" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/fdf2f8/831843?text=Vision+World'"/>
+        <h3 class="font-bold text-xl text-pink-700 mb-1">Vision World</h3>
+        <p class="text-gray-700 mb-1 capitalize">Retail</p>
+        <span class="text-sm font-semibold text-pink-700 bg-gray-100 rounded-full px-3 py-1">Shop No:- 131</span>
+      </div>
+    </div>
+
+    <!-- 2nd Floor -->
+    <div id="second" class="floor-content hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
+      <div class="brand-card group bg-white rounded-xl border-2 border-orange-500 shadow-lg transition hover:scale-105 hover:border-orange-600 hover:shadow-2xl p-6 flex flex-col items-center text-center">
+        <img src="assets/logos/7.webp" alt="Buzzy Inks Tattoo Studio" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/fff7ed/c2410c?text=Buzzy+Inks'"/>
+        <h3 class="font-bold text-xl text-orange-700 mb-1">Buzzy Inks Tattoo Studio</h3>
+        <p class="text-gray-700 mb-1 lowercase">tattoo</p>
+        <p class="text-sm text-gray-500 mb-1">📞 9860038601</p>
+        <span class="text-sm font-semibold text-orange-700 bg-gray-100 rounded-full px-3 py-1">Shop No:- 210</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-orange-500 shadow-lg transition hover:scale-105 hover:border-orange-600 hover:shadow-2xl p-6 flex flex-col items-center text-center">
+        <img src="assets/logos/61.webp" alt="City Pride" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/fff7ed/c2410c?text=City+Pride'"/>
+        <h3 class="font-bold text-xl text-orange-700 mb-1">City Pride</h3>
+        <p class="text-gray-700 mb-1 lowercase">entertainment</p>
+        <span class="text-sm font-semibold text-orange-700 bg-gray-100 rounded-full px-3 py-1">Shop No:- 1</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-orange-500 shadow-lg transition hover:scale-105 hover:border-orange-600 hover:shadow-2xl p-6 flex flex-col items-center text-center">
+        <img src="assets/logos/9.webp" alt="VR play and Party" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/fff7ed/c2410c?text=VR+Play'"/>
+        <h3 class="font-bold text-xl text-orange-700 mb-1">VR play and Party</h3>
+        <p class="text-gray-700 mb-1 lowercase">entertainment</p>
+        <span class="text-sm font-semibold text-orange-700 bg-gray-100 rounded-full px-3 py-1">Shop No:- 211</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-orange-500 shadow-lg transition hover:scale-105 hover:border-orange-600 hover:shadow-2xl p-6 flex flex-col items-center text-center">
+        <img src="assets/logos/2.webp" alt="Delhi Treat" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/fff7ed/c2410c?text=Delhi+Treat'"/>
+        <h3 class="font-bold text-xl text-orange-700 mb-1">Delhi Treat</h3>
+        <p class="text-gray-700 mb-1 capitalize">Food Court</p>
+        <span class="text-sm font-semibold text-orange-700 bg-gray-100 rounded-full px-3 py-1">Shop No:- QSR 5</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-orange-500 shadow-lg transition hover:scale-105 hover:border-orange-600 hover:shadow-2xl p-6 flex flex-col items-center text-center">
+        <img src="assets/logos/12.webp" alt="Chicago pizza" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/fff7ed/c2410c?text=Chicago+Pizza'"/>
+        <h3 class="font-bold text-xl text-orange-700 mb-1">Chicago pizza</h3>
+        <p class="text-gray-700 mb-1 capitalize">Food Court</p>
+        <span class="text-sm font-semibold text-orange-700 bg-gray-100 rounded-full px-3 py-1">Shop No:- 203</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-orange-500 shadow-lg transition hover:scale-105 hover:border-orange-600 hover:shadow-2xl p-6 flex flex-col items-center text-center">
+        <img src="https://placehold.co/128x80/fff7ed/c2410c?text=Nashta+Express" alt="Nashta Express" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" />
+        <h3 class="font-bold text-xl text-orange-700 mb-1">Nashta Express</h3>
+        <p class="text-gray-700 mb-1 capitalize">Food Court</p>
+        <span class="text-sm font-semibold text-orange-700 bg-gray-100 rounded-full px-3 py-1">Shop No:- QSR6</span>
+      </div>
+
+      <div class="brand-card group bg-white rounded-xl border-2 border-orange-500 shadow-lg transition hover:scale-105 hover:border-orange-600 hover:shadow-2xl p-6 flex flex-col items-center text-center">
+        <img src="assets/logos/23.webp" alt="Mak o Mak" class="mb-4 h-20 w-32 object-contain rounded bg-gray-100" onerror="this.src='https://placehold.co/128x80/fff7ed/c2410c?text=Mak+o+Mak'"/>
+        <h3 class="font-bold text-xl text-orange-700 mb-1">Mak o Mak</h3>
+        <p class="text-gray-700 mb-1 capitalize">Food Court</p>
+        <span class="text-sm font-semibold text-orange-700 bg-gray-100 rounded-full px-3 py-1">Shop No:- kiosk 1-C</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Removed old <script> and <style> blocks for floor directory -->
+
+
+    <!-- CTA Section -->
+    <section class="py-16 sm:py-20 bg-gradient-to-r from-[#002F67] to-[#004C91]">
+        <div class="container mx-auto px-6 text-center text-white">
+            <!-- Responsive typography -->
+            <h2 class="text-3xl sm:text-5xl font-black mb-6">Your Next Favourite Brand Awaits</h2>
+            <p class="text-lg sm:text-2xl mb-8">Discover 130+ premium outlets at Nyati Plaza</p>
+            <button class="btn-gradient">
+                <i class="fas fa-map-marker-alt mr-2"></i>Visit Us Today
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer (Copied from index.html for consistency) -->
+  <footer class="bg-gradient-to-b from-[#001F4D] to-[#002F67] text-white pt-16 pb-10 relative overflow-hidden">
+  <div class="container mx-auto px-6 relative z-10">
+    <!-- Top Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+      <!-- Brand / About -->
+      <div>
+        <div class="flex items-center space-x-3 mb-5">
+          <img src="assets/logos/65.webp" alt="Nyati Plaza Logo" class="h-14 object-contain" />
+          <h3 class="text-2xl font-bold tracking-wide">Nyati Plaza</h3>
+        </div>
+        <p class="text-gray-300 leading-relaxed text-sm md:text-base">
+          Experience luxury shopping, fine dining, and entertainment at Pune’s most vibrant destination where lifestyle meets elegance.
+        </p>
+      </div>
+
+      <!-- Explore -->
+      <div>
+        <h4 class="text-lg font-bold mb-5 text-[#E5B200] uppercase">Explore</h4>
+        <ul class="space-y-2 text-gray-300">
+          <li><a href="brands.html" class="hover:text-[#E5B200] transition">Brands Directory</a></li>
+          <li><a href="dine.html" class="hover:text-[#E5B200] transition">Dining Options</a></li>
+          <li><a href="entertainment.html" class="hover:text-[#E5B200] transition">Entertainment</a></li>
+          <li><a href="visitnyati.html" class="hover:text-[#E5B200] transition">Visit Info</a></li>
+        </ul>
+      </div>
+
+      <!-- Visit -->
+      <div>
+        <h4 class="text-lg font-bold mb-5 text-[#E5B200] uppercase">Visit</h4>
+        <ul class="space-y-2 text-gray-300">
+          <li><a href="visitnyati.html" class="hover:text-[#E5B200] transition">Mall Hours</a></li>
+          <li><a href="visitnyati.html" class="hover:text-[#E5B200] transition">Parking Info</a></li>
+          <li><a href="visitnyati.html" class="hover:text-[#E5B200] transition">Mall Map</a></li>
+          <li><a href="visitnyati.html" class="hover:text-[#E5B200] transition">FAQs</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact + Social -->
+      <div>
+        <h4 class="text-lg font-bold mb-5 text-[#E5B200] uppercase">Contact</h4>
+        <ul class="space-y-3 text-gray-300 mb-6">
+          <li class="flex items-center"><i class="fas fa-phone text-[#E5B200] mr-3"></i> +91 9164089089</li>
+          <li class="flex items-center"><i class="fas fa-map-marker-alt text-[#E5B200] mr-3"></i> Pune, India</li>
+          <li class="flex items-center"><i class="fas fa-envelope text-[#E5B200] mr-3"></i> info@nyatiplaza.com</li>
+        </ul>
+
+        <!-- Social Links Right Side -->
+        <div class="flex flex-wrap gap-4 justify-start lg:justify-start">
+          <a href="https://www.facebook.com/Nyatiplaza/" class="w-10 h-10 rounded-full bg-[#E5B200]/20 border border-[#E5B200] flex items-center justify-center hover:bg-[#E5B200] hover:text-[#001F4D] transition">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="https://www.instagram.com/nyatiplazamall" class="w-10 h-10 rounded-full bg-[#E5B200]/20 border border-[#E5B200] flex items-center justify-center hover:bg-[#E5B200] hover:text-[#001F4D] transition">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="https://www.youtube.com/@Nyatiplazapune" class="w-10 h-10 rounded-full bg-[#E5B200]/20 border border-[#E5B200] flex items-center justify-center hover:bg-[#E5B200] hover:text-[#001F4D] transition">
+            <i class="fab fa-youtube"></i>
+          </a>
+          <a href="https://www.linkedin.com/company/nyatiplaza" class="w-10 h-10 rounded-full bg-[#E5B200]/20 border border-[#E5B200] flex items-center justify-center hover:bg-[#E5B200] hover:text-[#001F4D] transition">
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="border-t border-gray-600 my-8"></div>
+
+    <!-- Bottom Copyright -->
+    <div class="flex flex-col md:flex-row items-center justify-between text-gray-400 text-xs sm:text-sm">
+      <p class="text-center md:text-left mb-3 md:mb-0">
+        © 2025 Nyati Plaza. All Rights Reserved.
+      </p>
+      <div class="space-x-3">
+        <a href="#" class="hover:text-white transition">Privacy Policy</a>
+        <span>|</span>
+        <a href="#" class="hover:text-white transition">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decorative Blur Background -->
+  <div class="absolute top-0 right-0 w-64 h-64 bg-[#E5B200]/10 blur-3xl rounded-full -z-10"></div>
+  <div class="absolute bottom-0 left-0 w-64 h-64 bg-[#E5B200]/10 blur-3xl rounded-full -z-10"></div>
+</footer>
+
+
+    <!-- Combined & Corrected Script -->
+    <script>
+        // --- Floor Switching Logic ---
+        function switchFloor(floor, button) {
+            // Hide all floors
+            document.querySelectorAll('.floor-content').forEach(el => el.classList.add('hidden'));
+            
+            // Show selected floor
+            const floorEl = document.getElementById(floor);
+            if (floorEl) {
+                floorEl.classList.remove('hidden');
+            }
+            
+            // Update button styles
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+        }
+
+        // --- Header Scroll Effect ---
+        const header = document.getElementById('mainHeader');
+        if (header) {
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+        }
+
+        // --- Mobile Menu Logic ---
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuIcon = document.getElementById('menuIcon');
+
+        if (mobileMenuBtn && mobileMenu && menuIcon) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                // Change icon
+                if (mobileMenu.classList.contains('hidden')) {
+                    menuIcon.classList.remove('fa-times');
+                    menuIcon.classList.add('fa-bars');
+                } else {
+                    menuIcon.classList.remove('fa-bars');
+                    menuIcon.classList.add('fa-times');
+                }
+            });
+
+            // Close mobile menu when a link is clicked
+            document.querySelectorAll('#mobileMenu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    menuIcon.classList.remove('fa-times');
+                    menuIcon.classList.add('fa-bars');
+                });
+            });
+        }
+
+        // --- Smooth Scroll for Anchor Links ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const href = this.getAttribute('href');
+                
+                // Special case for home link (if it exists)
+                if (href === "#home" || href === "index.html") {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                    // Close mobile menu if open
+                    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                        menuIcon.classList.remove('fa-times');
+                        menuIcon.classList.add('fa-bars');
+                    }
+                    return;
+                }
+
+                const target = document.querySelector(href);
+                if (target) {
+                    const headerOffset = 90; // Height of sticky header
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+
+                    // Close mobile menu if open
+                    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                        menuIcon.classList.remove('fa-times');
+                        menuIcon.classList.add('fa-bars');
+                    }
+                } else if (href.includes('.html')) {
+                    // Fallback for external page links
+                    window.location.href = href;
+                }
+            });
+        });
+        
+    </script>
+</body>
+</html>
